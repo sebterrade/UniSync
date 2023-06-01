@@ -62,6 +62,9 @@ public class Student {
 	public int getYear() {
 		return year;
 	}
+        public double getGPA() {
+		return gpa;
+	}
 	
 	
 	

@@ -90,19 +90,19 @@ public class SignupPage extends javax.swing.JFrame {
                 txt_studentIDActionPerformed(evt);
             }
         });
-        getContentPane().add(txt_studentID, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 330, 210, -1));
+        getContentPane().add(txt_studentID, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 330, 210, -1));
 
         jLabel6.setFont(new java.awt.Font("Segoe UI Semilight", 1, 14)); // NOI18N
         jLabel6.setText("Student ID");
-        getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 290, 130, 30));
+        getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 290, 130, 30));
 
         txt_password.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 2, 0, new java.awt.Color(255, 255, 255)));
         txt_password.setPlaceholder("Enter Password...");
-        getContentPane().add(txt_password, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 440, 210, -1));
+        getContentPane().add(txt_password, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 440, 210, -1));
 
         jLabel8.setFont(new java.awt.Font("Segoe UI Semilight", 1, 14)); // NOI18N
         jLabel8.setText("Password");
-        getContentPane().add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 400, 130, 30));
+        getContentPane().add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 400, 130, 30));
 
         rSMaterialButtonRectangle1.setBackground(new java.awt.Color(204, 0, 51));
         rSMaterialButtonRectangle1.setText("Register");
@@ -115,19 +115,19 @@ public class SignupPage extends javax.swing.JFrame {
 
         txt_firstName.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 2, 0, new java.awt.Color(255, 255, 255)));
         txt_firstName.setPlaceholder("Enter First Name...");
-        getContentPane().add(txt_firstName, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 550, 210, -1));
+        getContentPane().add(txt_firstName, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 550, 210, -1));
 
         jLabel10.setFont(new java.awt.Font("Segoe UI Semilight", 1, 14)); // NOI18N
         jLabel10.setText("First Name");
-        getContentPane().add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 510, 130, 30));
+        getContentPane().add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 510, 130, 30));
 
         txt_lastName.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 2, 0, new java.awt.Color(255, 255, 255)));
         txt_lastName.setPlaceholder("Enter Last Name...");
-        getContentPane().add(txt_lastName, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 550, 210, -1));
+        getContentPane().add(txt_lastName, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 550, 210, -1));
 
         jLabel14.setFont(new java.awt.Font("Segoe UI Semilight", 1, 14)); // NOI18N
         jLabel14.setText("Last Name");
-        getContentPane().add(jLabel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 510, 130, 30));
+        getContentPane().add(jLabel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 510, 130, 30));
 
         txt_program.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 2, 0, new java.awt.Color(255, 255, 255)));
         txt_program.setPlaceholder("Enter Program...");
@@ -136,19 +136,19 @@ public class SignupPage extends javax.swing.JFrame {
                 txt_programActionPerformed(evt);
             }
         });
-        getContentPane().add(txt_program, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 330, 210, -1));
+        getContentPane().add(txt_program, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 330, 210, -1));
 
         jLabel12.setFont(new java.awt.Font("Segoe UI Semilight", 1, 14)); // NOI18N
         jLabel12.setText("Program");
-        getContentPane().add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 290, 130, 30));
+        getContentPane().add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 290, 130, 30));
 
         txt_year.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 2, 0, new java.awt.Color(255, 255, 255)));
         txt_year.setPlaceholder("Enter Year...");
-        getContentPane().add(txt_year, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 440, 210, -1));
+        getContentPane().add(txt_year, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 440, 210, -1));
 
         jLabel16.setFont(new java.awt.Font("Segoe UI Semilight", 1, 14)); // NOI18N
         jLabel16.setText("Year of Study");
-        getContentPane().add(jLabel16, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 400, 130, 30));
+        getContentPane().add(jLabel16, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 400, 130, 30));
 
         setSize(new java.awt.Dimension(615, 835));
         setLocationRelativeTo(null);

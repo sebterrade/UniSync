@@ -4,6 +4,7 @@
 
 package MainPackage;
 import JFramePackage.LoginPage;
+import JFramePackage.LoginPage;
 import JFramePackage.SignupPage;
 import java.sql.SQLException;
 
@@ -19,9 +20,9 @@ import com.mysql.jdbc.Driver;
  * @author sebte
  */
 public class UniSync {
-        static Connection conn = null;
-	static Statement stmt = null;
-	static ResultSet result = null;
+        public static Connection conn = null;
+	public static Statement stmt = null;
+	public static ResultSet result = null;
 	
 	public static Student student;
 	
@@ -106,55 +107,34 @@ public class UniSync {
 	}
 	
 	//Add another course 
-	public static void addCourses(int id, String pass) {
-		Scanner courseInfo = new Scanner(System.in);
-		boolean courseExists = false;
-		boolean courseAdded = false;
+	public static int addCourses(int id, String courseCode) {
 		
 		while (true) {
-			System.out.println("Enter Course Code (No spaces): ");
-			String courseCode = courseInfo.next();
-			
 			
 			try {
 				result = stmt.executeQuery("Select * from studentcourses");
 				while(result.next()) {
 					if (courseCode.equals(result.getString("Code")) && id == result.getInt("StudentID") ) {
-						System.out.println("Course exists");
-						courseAdded = true;
-						break;
+						return 1;
 					}
 				}
 				
-				if (courseAdded) {
-					System.out.println("Course has already been added");
-				}else {
-					result = stmt.executeQuery("Select * from courses");
+				result = stmt.executeQuery("Select * from courses");
 					
-					while (result.next()) {
-						if (courseCode.equals(result.getString("Code")) ) {
-							System.out.println("Course exists");
-							courseExists = true;
-							stmt.execute("insert into studentcourses (StudentID, Code) values ("+id+",'"+ courseCode+"')");
-							System.out.println("Course succesfully added!");
-							break;
-						}
+				while (result.next()) {
+					if (courseCode.equals(result.getString("Code")) ) {
+						stmt.execute("insert into studentcourses (StudentID, Code) values ("+id+",'"+ courseCode+"')");
+						return 2;
 					}
-					if (!courseExists)
-						System.out.println("Course was not found in database");
 				}
+				
+				return 0;
 				
 						
 			}catch(Exception e){
 				e.printStackTrace();
 			}
-			
-			System.out.println("Do you want to add another course (yes or no)?");
-			courseInfo.nextLine();
-			if (courseInfo.next().equals("no"))
-				break;
 		}
-		
 	}
 	
 	public static void modifyCourse(int id) {

@@ -42,7 +42,6 @@ public class LoginPage extends javax.swing.JFrame {
         jLabel8 = new javax.swing.JLabel();
         rSMaterialButtonRectangle1 = new rojerusan.RSMaterialButtonRectangle();
         rSMaterialButtonRectangle2 = new rojerusan.RSMaterialButtonRectangle();
-        jLabel5 = new javax.swing.JLabel();
         errorMsg = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -106,7 +105,6 @@ public class LoginPage extends javax.swing.JFrame {
             }
         });
         getContentPane().add(rSMaterialButtonRectangle2, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 530, -1, -1));
-        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 510, 110, -1));
         getContentPane().add(errorMsg, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 510, 260, 10));
 
         setSize(new java.awt.Dimension(615, 835));
@@ -177,7 +175,6 @@ public class LoginPage extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel8;
     private rojerusan.RSMaterialButtonRectangle rSMaterialButtonRectangle1;
