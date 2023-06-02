@@ -109,12 +109,15 @@ public class UniSync {
 	//Add another course 
 	public static int addCourses(int id, String courseCode) {
 		
-		while (true) {
 			
 			try {
 				result = stmt.executeQuery("Select * from studentcourses");
 				while(result.next()) {
 					if (courseCode.equals(result.getString("Code")) && id == result.getInt("StudentID") ) {
+                                            if (result.getInt("Status")==0){
+                                                stmt.execute("update studentcourses set Status=1 where StudentID =" + id + " and Code='" + courseCode+ "'");
+                                                return 2;
+                                            }
 						return 1;
 					}
 				}
@@ -123,7 +126,7 @@ public class UniSync {
 					
 				while (result.next()) {
 					if (courseCode.equals(result.getString("Code")) ) {
-						stmt.execute("insert into studentcourses (StudentID, Code) values ("+id+",'"+ courseCode+"')");
+						stmt.execute("insert into studentcourses (StudentID, Code, Status) values ("+id+",'"+ courseCode+"', 1)");
 						return 2;
 					}
 				}
@@ -133,8 +136,27 @@ public class UniSync {
 						
 			}catch(Exception e){
 				e.printStackTrace();
+                                return 0;
 			}
-		}
+	}
+        
+        public static int deleteCourses(int id, String courseCode) {
+		
+			try {
+				result = stmt.executeQuery("Select * from studentcourses");
+				while(result.next()) {
+					if (courseCode.equals(result.getString("Code")) && id == result.getInt("StudentID") ) {
+                                                stmt.execute("update studentcourses set Status=0 where StudentID =" + id + " and Code='" + courseCode+ "'");
+						return 1;
+					}
+				}
+				return 0;
+				
+						
+			}catch(Exception e){
+				e.printStackTrace();
+                                return 0;
+			}
 	}
 	
 	public static void modifyCourse(int id) {
