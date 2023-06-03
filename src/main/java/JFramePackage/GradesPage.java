@@ -85,9 +85,10 @@ public class GradesPage extends javax.swing.JFrame {
         rSComboMetro1 = new rojerusan.RSComboMetro();
         jScrollPane1 = new javax.swing.JScrollPane();
         deliverablesTable = new rojeru_san.complementos.RSTableMetro();
-        txt_enterCourse1 = new app.bolivia.swing.JCTextField();
-        addCourseButton1 = new rojerusan.RSMaterialButtonRectangle();
-        txt_enterCourse2 = new app.bolivia.swing.JCTextField();
+        txt_enterGrade = new app.bolivia.swing.JCTextField();
+        modifyGradeButton = new rojerusan.RSMaterialButtonRectangle();
+        txt_enterDelivNum = new app.bolivia.swing.JCTextField();
+        errorMsg2 = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
 
@@ -149,18 +150,18 @@ public class GradesPage extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(15, 15, 15)
+                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 296, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(26, 26, 26)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 296, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(txt_enterCourse, javax.swing.GroupLayout.PREFERRED_SIZE, 173, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(addCourseButton, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(deleteCourseButton, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(26, 26, 26)
-                        .addComponent(errorMsg, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(63, Short.MAX_VALUE))
+                                .addComponent(deleteCourseButton, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(errorMsg, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(52, Short.MAX_VALUE))
             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jPanel1Layout.createSequentialGroup()
                     .addGap(25, 25, 25)
@@ -216,26 +217,26 @@ public class GradesPage extends javax.swing.JFrame {
         deliverablesTable.setColorBackgoundHead(new java.awt.Color(204, 0, 51));
         jScrollPane1.setViewportView(deliverablesTable);
 
-        txt_enterCourse1.setPlaceholder("Enter Grade Obtained...");
-        txt_enterCourse1.addActionListener(new java.awt.event.ActionListener() {
+        txt_enterGrade.setPlaceholder("Enter Grade Obtained...");
+        txt_enterGrade.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txt_enterCourse1ActionPerformed(evt);
+                txt_enterGradeActionPerformed(evt);
             }
         });
 
-        addCourseButton1.setBackground(new java.awt.Color(204, 0, 51));
-        addCourseButton1.setText("Modify Grade");
-        addCourseButton1.setActionCommand("");
-        addCourseButton1.addActionListener(new java.awt.event.ActionListener() {
+        modifyGradeButton.setBackground(new java.awt.Color(204, 0, 51));
+        modifyGradeButton.setText("Modify Grade");
+        modifyGradeButton.setActionCommand("");
+        modifyGradeButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                addCourseButton1ActionPerformed(evt);
+                modifyGradeButtonActionPerformed(evt);
             }
         });
 
-        txt_enterCourse2.setPlaceholder("Enter Deliverable Number");
-        txt_enterCourse2.addActionListener(new java.awt.event.ActionListener() {
+        txt_enterDelivNum.setPlaceholder("Enter Deliverable Number");
+        txt_enterDelivNum.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txt_enterCourse2ActionPerformed(evt);
+                txt_enterDelivNumActionPerformed(evt);
             }
         });
 
@@ -246,12 +247,13 @@ public class GradesPage extends javax.swing.JFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(32, 32, 32)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(errorMsg2, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(txt_enterCourse2, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(txt_enterDelivNum, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(txt_enterCourse1, javax.swing.GroupLayout.PREFERRED_SIZE, 173, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(txt_enterGrade, javax.swing.GroupLayout.PREFERRED_SIZE, 173, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(addCourseButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(modifyGradeButton, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 296, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 413, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -266,17 +268,16 @@ public class GradesPage extends javax.swing.JFrame {
                 .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(12, 12, 12)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(jScrollPane1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(txt_enterCourse1, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(addCourseButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txt_enterCourse2, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(rSComboMetro1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 523, Short.MAX_VALUE)))
-                .addContainerGap())
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 377, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(rSComboMetro1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(errorMsg2, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txt_enterGrade, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(modifyGradeButton, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txt_enterDelivNum, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jLabel1.setFont(new java.awt.Font("Segoe UI Symbol", 1, 48)); // NOI18N
@@ -375,21 +376,23 @@ public class GradesPage extends javax.swing.JFrame {
             DefaultComboBoxModel modelCombo = (DefaultComboBoxModel) rSComboMetro1.getModel();
             int res = UniSync.addCourses(UniSync.getStudent().getStudentID(), codeEntered);
         
-            if (res == 1){
-                errorMsg.setText("Course has already been added");
-            }else if (res==2){
-                UniSync.result = UniSync.stmt.executeQuery("Select * from courses inner join studentcourses using (Code) where Status=1 and StudentID =" + UniSync.getStudent().getStudentID() );
-               
-                while (UniSync.result.next()) {
-                    if (UniSync.result.getString("Code").equals(codeEntered)){
-                        model.addRow(new Object[] {UniSync.result.getString("Code"), UniSync.result.getDouble("Credits"), UniSync.result.getDouble("Grade"), UniSync.result.getDouble("CourseAverage") });
-                        modelCombo.addElement(UniSync.result.getString("Code"));
-                    }
+            switch (res) {
+                case 1:
+                    errorMsg.setText("Course has already been added");
+                    break;
+                case 2:
+                    UniSync.result = UniSync.stmt.executeQuery("Select * from courses inner join studentcourses using (Code) where Status=1 and StudentID =" + UniSync.getStudent().getStudentID() );
+                    while (UniSync.result.next()) {
+                        if (UniSync.result.getString("Code").equals(codeEntered)){
+                            model.addRow(new Object[] {UniSync.result.getString("Code"), UniSync.result.getDouble("Credits"), UniSync.result.getDouble("Grade"), UniSync.result.getDouble("CourseAverage") });
+                            modelCombo.addElement(UniSync.result.getString("Code"));
+                        }
                         
-                }
-               errorMsg.setText("Course succesfully added");
-            }else{
-                errorMsg.setText("Course does not exist");
+                    }   errorMsg.setText("Course succesfully added");
+                    break;
+                default:
+                    errorMsg.setText("Course does not exist");
+                    break;
             }
         }catch(Exception e){
             e.printStackTrace();
@@ -398,44 +401,84 @@ public class GradesPage extends javax.swing.JFrame {
         
     }//GEN-LAST:event_addCourseButtonActionPerformed
 
-    private void txt_enterCourse1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_enterCourse1ActionPerformed
+    private void txt_enterGradeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_enterGradeActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txt_enterCourse1ActionPerformed
+    }//GEN-LAST:event_txt_enterGradeActionPerformed
 
-    private void addCourseButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addCourseButton1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_addCourseButton1ActionPerformed
+    private void modifyGradeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_modifyGradeButtonActionPerformed
+        DefaultTableModel model = (DefaultTableModel) rSTableMetro2.getModel();
+        DefaultComboBoxModel modelCombo = (DefaultComboBoxModel) rSComboMetro1.getModel();
+        
+        String courseSelected = (String)modelCombo.getSelectedItem();
+        int numEntered = Integer.parseInt(txt_enterDelivNum.getText());
+        Double gradeEntered = Double.valueOf(txt_enterGrade.getText());
+        
+        try{
+            
+   
+            int res = UniSync.updateGrade(numEntered, gradeEntered, courseSelected);
+        
+            switch (res) {
+                case 1:
+                    model.setValueAt(gradeEntered, numEntered-1, 2);
+                    break;
+                
+                default:
+                    errorMsg2.setText("Deliverable does not exist");
+                    break;
+            }
+        }catch(Exception e){
+            e.printStackTrace();
+	}
+    }//GEN-LAST:event_modifyGradeButtonActionPerformed
 
-    private void txt_enterCourse2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_enterCourse2ActionPerformed
+    private void txt_enterDelivNumActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_enterDelivNumActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txt_enterCourse2ActionPerformed
+    }//GEN-LAST:event_txt_enterDelivNumActionPerformed
 
     private void rSComboMetro1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rSComboMetro1ActionPerformed
         
     }//GEN-LAST:event_rSComboMetro1ActionPerformed
-
+    private boolean isUpdating = false;
     private void rSComboMetro1ItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_rSComboMetro1ItemStateChanged
-        DefaultTableModel model = (DefaultTableModel) deliverablesTable.getModel();
         
-        if (evt.getStateChange() == ItemEvent.SELECTED) {
+        DefaultTableModel model = (DefaultTableModel) deliverablesTable.getModel();
+
+        if (evt.getStateChange() == ItemEvent.SELECTED && !isUpdating) {
+            isUpdating = true;
+
             JComboBox<String> source = (JComboBox<String>) evt.getSource();
             String selectedItem = (String) source.getSelectedItem();
-            
+            model.setRowCount(0);
 
-            try{
-                UniSync.result = UniSync.stmt.executeQuery("Select * from deliverables inner join studentdeliverables using (Code) where StudentID =" + UniSync.getStudent().getStudentID() );
-               
+            try {
+                UniSync.result = UniSync.stmt.executeQuery("Select * from deliverables inner join studentdeliverables ON deliverables.Code = studentdeliverables.Code AND deliverables.DeliverableNum = studentdeliverables.DeliverableNum where studentdeliverables.StudentID =" + UniSync.getStudent().getStudentID());
+
                 while (UniSync.result.next()) {
-                    if (UniSync.result.getString("Code").equals(selectedItem)){
-                        model.addRow(new Object[] {UniSync.result.getString("Code"), UniSync.result.getDouble("Credits"), UniSync.result.getDouble("Grade"), UniSync.result.getDouble("CourseAverage") });
-
-                    }       
-
+                    if (UniSync.result.getString("Code").equals(selectedItem)) {
+                        model.addRow(new Object[] { UniSync.result.getInt("DeliverableNum"), UniSync.result.getString("DeliverableName"), UniSync.result.getDouble("DeliverableGrade"), UniSync.result.getDouble("DeliverableWeight") });
+                    }
                 }
-            }catch(Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
-            }    
-	}
+            }
+
+            try {
+                DefaultComboBoxModel modelCombo = (DefaultComboBoxModel) rSComboMetro1.getModel();
+                modelCombo.removeAllElements();
+
+                UniSync.result = UniSync.stmt.executeQuery("Select * from courses inner join studentcourses using (Code) where Status=1 and StudentID =" + UniSync.getStudent().getStudentID());
+
+                while (UniSync.result.next()) {
+                    modelCombo.addElement(UniSync.result.getString("Code"));
+                }
+                modelCombo.setSelectedItem(selectedItem);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            isUpdating = false;
+        }
             
     }//GEN-LAST:event_rSComboMetro1ItemStateChanged
 
@@ -479,10 +522,10 @@ public class GradesPage extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private rojerusan.RSMaterialButtonRectangle addCourseButton;
-    private rojerusan.RSMaterialButtonRectangle addCourseButton1;
     private rojerusan.RSMaterialButtonRectangle deleteCourseButton;
     private rojeru_san.complementos.RSTableMetro deliverablesTable;
     private javax.swing.JLabel errorMsg;
+    private javax.swing.JLabel errorMsg2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -491,11 +534,12 @@ public class GradesPage extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private rojerusan.RSMaterialButtonRectangle modifyGradeButton;
     private rojerusan.RSComboMetro rSComboMetro1;
     private rojerusan.RSMaterialButtonRectangle rSMaterialButtonRectangle1;
     private rojeru_san.complementos.RSTableMetro rSTableMetro2;
     private app.bolivia.swing.JCTextField txt_enterCourse;
-    private app.bolivia.swing.JCTextField txt_enterCourse1;
-    private app.bolivia.swing.JCTextField txt_enterCourse2;
+    private app.bolivia.swing.JCTextField txt_enterDelivNum;
+    private app.bolivia.swing.JCTextField txt_enterGrade;
     // End of variables declaration//GEN-END:variables
 }

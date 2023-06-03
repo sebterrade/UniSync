@@ -82,23 +82,23 @@
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" attributes="0">
                           <EmptySpace min="-2" pref="15" max="-2" attributes="0"/>
+                          <Component id="jLabel2" min="-2" pref="296" max="-2" attributes="0"/>
+                      </Group>
+                      <Group type="102" alignment="0" attributes="0">
+                          <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="jLabel2" min="-2" pref="296" max="-2" attributes="0"/>
-                              <Group type="102" alignment="0" attributes="0">
+                              <Group type="102" attributes="0">
                                   <Component id="txt_enterCourse" min="-2" pref="173" max="-2" attributes="0"/>
                                   <EmptySpace max="-2" attributes="0"/>
                                   <Component id="addCourseButton" min="-2" pref="135" max="-2" attributes="0"/>
                                   <EmptySpace max="-2" attributes="0"/>
                                   <Component id="deleteCourseButton" min="-2" pref="135" max="-2" attributes="0"/>
                               </Group>
+                              <Component id="errorMsg" min="-2" pref="270" max="-2" attributes="0"/>
                           </Group>
                       </Group>
-                      <Group type="102" alignment="0" attributes="0">
-                          <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
-                          <Component id="errorMsg" min="-2" pref="270" max="-2" attributes="0"/>
-                      </Group>
                   </Group>
-                  <EmptySpace pref="63" max="32767" attributes="0"/>
+                  <EmptySpace pref="52" max="32767" attributes="0"/>
               </Group>
               <Group type="103" rootIndex="1" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
@@ -236,12 +236,13 @@
               <Group type="102" alignment="0" attributes="0">
                   <EmptySpace min="-2" pref="32" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
+                      <Component id="errorMsg2" min="-2" pref="270" max="-2" attributes="0"/>
                       <Group type="102" attributes="0">
-                          <Component id="txt_enterCourse2" min="-2" pref="161" max="-2" attributes="0"/>
+                          <Component id="txt_enterDelivNum" min="-2" pref="161" max="-2" attributes="0"/>
                           <EmptySpace type="separate" max="-2" attributes="0"/>
-                          <Component id="txt_enterCourse1" min="-2" pref="173" max="-2" attributes="0"/>
+                          <Component id="txt_enterGrade" min="-2" pref="173" max="-2" attributes="0"/>
                           <EmptySpace type="separate" max="-2" attributes="0"/>
-                          <Component id="addCourseButton1" min="-2" pref="162" max="-2" attributes="0"/>
+                          <Component id="modifyGradeButton" min="-2" pref="162" max="-2" attributes="0"/>
                       </Group>
                       <Component id="jLabel3" min="-2" pref="296" max="-2" attributes="0"/>
                       <Group type="102" alignment="0" attributes="0">
@@ -261,21 +262,18 @@
                   <Component id="jLabel3" min="-2" pref="40" max="-2" attributes="0"/>
                   <EmptySpace min="-2" pref="12" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Group type="102" attributes="0">
-                          <Component id="jScrollPane1" max="32767" attributes="0"/>
-                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="3" attributes="0">
-                              <Component id="txt_enterCourse1" alignment="3" min="-2" pref="24" max="-2" attributes="0"/>
-                              <Component id="addCourseButton1" alignment="3" min="-2" pref="37" max="-2" attributes="0"/>
-                              <Component id="txt_enterCourse2" alignment="3" min="-2" pref="24" max="-2" attributes="0"/>
-                          </Group>
-                      </Group>
-                      <Group type="102" attributes="0">
-                          <Component id="rSComboMetro1" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace min="0" pref="523" max="32767" attributes="0"/>
-                      </Group>
+                      <Component id="jScrollPane1" min="-2" pref="377" max="-2" attributes="0"/>
+                      <Component id="rSComboMetro1" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
+                  <Component id="errorMsg2" min="-2" pref="14" max="-2" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="txt_enterGrade" alignment="3" min="-2" pref="24" max="-2" attributes="0"/>
+                      <Component id="modifyGradeButton" alignment="3" min="-2" pref="37" max="-2" attributes="0"/>
+                      <Component id="txt_enterDelivNum" alignment="3" min="-2" pref="24" max="-2" attributes="0"/>
+                  </Group>
+                  <EmptySpace max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -361,15 +359,15 @@
             </Component>
           </SubComponents>
         </Container>
-        <Component class="app.bolivia.swing.JCTextField" name="txt_enterCourse1">
+        <Component class="app.bolivia.swing.JCTextField" name="txt_enterGrade">
           <Properties>
             <Property name="placeholder" type="java.lang.String" value="Enter Grade Obtained..."/>
           </Properties>
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txt_enterCourse1ActionPerformed"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txt_enterGradeActionPerformed"/>
           </Events>
         </Component>
-        <Component class="rojerusan.RSMaterialButtonRectangle" name="addCourseButton1">
+        <Component class="rojerusan.RSMaterialButtonRectangle" name="modifyGradeButton">
           <Properties>
             <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="33" green="0" red="cc" type="rgb"/>
@@ -378,16 +376,18 @@
             <Property name="actionCommand" type="java.lang.String" value=""/>
           </Properties>
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="addCourseButton1ActionPerformed"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="modifyGradeButtonActionPerformed"/>
           </Events>
         </Component>
-        <Component class="app.bolivia.swing.JCTextField" name="txt_enterCourse2">
+        <Component class="app.bolivia.swing.JCTextField" name="txt_enterDelivNum">
           <Properties>
             <Property name="placeholder" type="java.lang.String" value="Enter Deliverable Number"/>
           </Properties>
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txt_enterCourse2ActionPerformed"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txt_enterDelivNumActionPerformed"/>
           </Events>
+        </Component>
+        <Component class="javax.swing.JLabel" name="errorMsg2">
         </Component>
       </SubComponents>
     </Container>

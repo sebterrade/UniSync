@@ -108,30 +108,48 @@ public class UniSync {
 	
 	//Add another course 
 	public static int addCourses(int id, String courseCode) {
-		
+                        int courseExists = 0;
 			
 			try {
-				result = stmt.executeQuery("Select * from studentcourses");
+                                Statement selectStmt = stmt.getConnection().createStatement();
+                                Statement updateStmt = stmt.getConnection().createStatement();
+                                
+				result = selectStmt.executeQuery("Select * from studentcourses");
 				while(result.next()) {
 					if (courseCode.equals(result.getString("Code")) && id == result.getInt("StudentID") ) {
                                             if (result.getInt("Status")==0){
-                                                stmt.execute("update studentcourses set Status=1 where StudentID =" + id + " and Code='" + courseCode+ "'");
+                                                updateStmt.execute("update studentcourses set Status=1 where StudentID =" + id + " and Code='" + courseCode+ "'");
                                                 return 2;
                                             }
 						return 1;
 					}
 				}
+                               
 				
-				result = stmt.executeQuery("Select * from courses");
+				result = selectStmt.executeQuery("Select * from courses");
 					
 				while (result.next()) {
 					if (courseCode.equals(result.getString("Code")) ) {
-						stmt.execute("insert into studentcourses (StudentID, Code, Status) values ("+id+",'"+ courseCode+"', 1)");
-						return 2;
+                                            updateStmt.execute("insert into studentcourses (StudentID, Code, Status) values ("+id+",'"+ courseCode +"', 1)");
+                                            courseExists=1;
+                                            break;
 					}
 				}
-				
-				return 0;
+                                
+                                if (courseExists==0){
+                                    return 0;
+                                } 
+                                else{
+                                    result = selectStmt.executeQuery("Select * from deliverables where Code ='" + courseCode + "'");
+                                  
+                                    while (result.next()) {
+                                        int deliverableNum = result.getInt("DeliverableNum");
+                                        updateStmt.execute("insert into studentdeliverables (StudentID, DeliverableNum, Code) values ("+id+",'"+ deliverableNum+"','" + courseCode+"')");
+                                    }
+                                    return 2;
+
+                                }
+                                
 				
 						
 			}catch(Exception e){
@@ -158,6 +176,19 @@ public class UniSync {
                                 return 0;
 			}
 	}
+        
+        public static int updateGrade(int deliverableNum, Double grade, String courseCode) {
+                    
+			try {
+                            stmt.execute("update studentdeliverables set DeliverableGrade =" + grade + " where DeliverableNum="+ deliverableNum + " and Code ='" + courseCode+"' and StudentID = " + student.getStudentID());
+                            return 1;
+		
+			}catch(Exception e){
+				e.printStackTrace();
+                                return 0;
+			}
+	}
+        
 	
 	public static void modifyCourse(int id) {
 		ResultSet result2= null;
