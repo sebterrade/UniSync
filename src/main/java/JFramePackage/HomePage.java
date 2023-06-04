@@ -5,6 +5,7 @@
 package JFramePackage;
 
 import MainPackage.UniSync;
+import java.text.DecimalFormat;
 
 
 /**
@@ -20,6 +21,11 @@ public class HomePage extends javax.swing.JFrame {
         
         initComponents();
         jLabel5.setText(UniSync.getStudent().getFirstName() + " " + UniSync.getStudent().getLastName());
+        
+        DecimalFormat decimalFormat = new DecimalFormat("#.##");
+        double gpa = UniSync.calcGPA();
+        gpa = Double.parseDouble(decimalFormat.format(gpa));
+        gpaLabel.setText(Double.toString(gpa));
     }
     
     
@@ -53,7 +59,7 @@ public class HomePage extends javax.swing.JFrame {
         jLabel11 = new javax.swing.JLabel();
         jLabel12 = new javax.swing.JLabel();
         jPanel12 = new javax.swing.JPanel();
-        jLabel13 = new javax.swing.JLabel();
+        gpaLabel = new javax.swing.JLabel();
         jLabel14 = new javax.swing.JLabel();
         jPanel13 = new javax.swing.JPanel();
         jLabel15 = new javax.swing.JLabel();
@@ -280,9 +286,9 @@ public class HomePage extends javax.swing.JFrame {
 
         jPanel12.setBackground(new java.awt.Color(204, 0, 51));
 
-        jLabel13.setFont(new java.awt.Font("Segoe UI Semibold", 1, 24)); // NOI18N
-        jLabel13.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel13.setText(Double.toString(UniSync.getStudent().getGPA()));
+        gpaLabel.setFont(new java.awt.Font("Segoe UI Semibold", 1, 24)); // NOI18N
+        gpaLabel.setForeground(new java.awt.Color(255, 255, 255));
+        gpaLabel.setText(Double.toString(UniSync.getStudent().getGPA()));
 
         jLabel14.setForeground(new java.awt.Color(255, 255, 255));
         jLabel14.setText("Grade Point Average");
@@ -297,14 +303,14 @@ public class HomePage extends javax.swing.JFrame {
                     .addGroup(jPanel12Layout.createSequentialGroup()
                         .addComponent(jLabel14, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 21, Short.MAX_VALUE))
-                    .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                    .addComponent(gpaLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel12Layout.setVerticalGroup(
             jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel12Layout.createSequentialGroup()
                 .addGap(21, 21, 21)
-                .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(gpaLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel14)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -490,11 +496,11 @@ public class HomePage extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel gpaLabel;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
-    private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel16;

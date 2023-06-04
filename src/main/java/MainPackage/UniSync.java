@@ -59,7 +59,7 @@ public class UniSync {
 					student.setProgram(result.getString("Program"));
 					student.setYear(result.getInt("Year"));
 					
-					calcGPA(result.getInt("StudentID"));
+					calcGPA();
 					return 1;
 				}
 					
@@ -144,7 +144,7 @@ public class UniSync {
                                   
                                     while (result.next()) {
                                         int deliverableNum = result.getInt("DeliverableNum");
-                                        updateStmt.execute("insert into studentdeliverables (StudentID, DeliverableNum, Code) values ("+id+",'"+ deliverableNum+"','" + courseCode+"')");
+                                        updateStmt.execute("insert into studentdeliverables (StudentID, DeliverableNum, Code, DeliverableStatus) values ("+id+",'"+ deliverableNum+"','" + courseCode+"', 0)");
                                     }
                                     return 2;
 
@@ -180,7 +180,7 @@ public class UniSync {
         public static int updateGrade(int deliverableNum, Double grade, String courseCode) {
                     
 			try {
-                            stmt.execute("update studentdeliverables set DeliverableGrade =" + grade + " where DeliverableNum="+ deliverableNum + " and Code ='" + courseCode+"' and StudentID = " + student.getStudentID());
+                            stmt.execute("update studentdeliverables set DeliverableGrade =" + grade + ", DeliverableStatus = 1 where DeliverableNum="+ deliverableNum + " and Code ='" + courseCode+"' and StudentID = " + student.getStudentID());
                             return 1;
 		
 			}catch(Exception e){
@@ -189,7 +189,63 @@ public class UniSync {
 			}
 	}
         
-	
+        public static double calculateCourseGrade(String courseCode) {
+                    
+			try {
+                            //Calculate new grade for course
+					double sum=0;
+					double weightSum=0;
+					double courseAverage=0;
+					
+                                        result = stmt.executeQuery("Select * from studentdeliverables inner join deliverables "
+                                                + "on studentdeliverables.Code = deliverables.Code and studentdeliverables.DeliverableNum = deliverables.DeliverableNum "
+                                                + "where StudentID="+student.getStudentID()+" and studentdeliverables.Code='"+courseCode+"' and DeliverableStatus=1");
+                                        
+					while (result.next()) {
+						double weight= result.getDouble("DeliverableWeight");
+						
+						weightSum= weightSum + weight;
+						sum = sum + weight*result.getDouble("DeliverableGrade");
+						courseAverage = sum/weightSum;
+						
+					}
+					stmt.execute("update studentcourses set Grade="+ courseAverage + "where Code='"+courseCode+"'");
+                                        return courseAverage;
+		
+			}catch(Exception e){
+				e.printStackTrace();
+                                return 0;
+			}
+	}
+        
+        public static double requiredGrade(double desiredGrade, String courseCode){
+                double sum=0;
+                double weightSum=0;
+                double courseAverage=0;
+		try{
+                    result = stmt.executeQuery("Select * from studentdeliverables inner join deliverables "
+                              + "on studentdeliverables.Code = deliverables.Code and studentdeliverables.DeliverableNum = deliverables.DeliverableNum "
+                              + "where StudentID="+student.getStudentID()+" and studentdeliverables.Code='"+courseCode+"' and DeliverableStatus=1");
+                                        
+                    while (result.next()) {
+                        double weight= result.getDouble("DeliverableWeight");
+						
+                        weightSum= weightSum + weight;
+                        sum = sum + weight*result.getDouble("DeliverableGrade");
+                        courseAverage = sum/weightSum;
+						
+                    }
+                                        
+                    double remainingGrade = (desiredGrade*100-(courseAverage*weightSum))/(100-weightSum);
+                    return remainingGrade;
+                    
+                }catch(Exception e){
+                    e.printStackTrace();
+                    return 0.0;
+		}			
+                
+        }
+        
 	public static void modifyCourse(int id) {
 		ResultSet result2= null;
 		Statement stmt2=null;
@@ -308,31 +364,21 @@ public class UniSync {
 	}
 	
 	//Calculate user's GPA
-	public static void calcGPA(int id) {
+	public static double calcGPA() {
 		try {
-			ResultSet result2= null;
-			Statement stmt2=null;
-			ResultSet result3= null;
-			Statement stmt3=null;
-			stmt2 = conn.createStatement();
-			stmt3 = conn.createStatement();
+			Statement selectStmt = stmt.getConnection().createStatement();
+                        Statement updateStmt = stmt.getConnection().createStatement();
 			//Calculate students GPA 
 			double sum=0;
 			double creditSum=0;
 			double GPA=0;
 			double grade;
 			String code;
-			result3 = stmt3.executeQuery("Select * from studentcourses where StudentID="+id);
-			while (result3.next()) {
-				code = result3.getString("Code");
-				result2 = stmt2.executeQuery("Select * from courses where Code='" + code + "'");
-				
-				double credit=0;
-				while(result2.next()) {
-					credit = result2.getDouble("Credits");
-				}
-				creditSum= creditSum + credit;
-				grade = result3.getDouble("Grade");
+			result = selectStmt.executeQuery("Select * from studentcourses inner join courses on studentcourses.Code = courses.Code where StudentID="+ student.getStudentID());
+			while (result.next()) {
+                                double credit = result.getDouble("Credits");
+				creditSum += credit;
+				grade = result.getDouble("Grade");
 				
 				if (grade>=90.0)
 					grade=4.3;
@@ -360,15 +406,16 @@ public class UniSync {
 					grade=0.7;
 				else
 					grade=0.0;
-				
-				
+                                
 				sum = sum + credit*grade;
 				GPA = sum/creditSum;
-				
 			}
-			stmt3.execute("update students set GPA="+ GPA + "where StudentID="+id);
+                        updateStmt.execute("update students set GPA="+ GPA + "where StudentID="+student.getStudentID());
+                        return GPA;
+			
 		}catch(Exception e){
 			e.printStackTrace();
+                        return 0.0;
 		}
 		
 	}

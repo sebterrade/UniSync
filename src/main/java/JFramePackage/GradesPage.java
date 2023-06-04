@@ -10,6 +10,7 @@ import static MainPackage.UniSync.result;
 import static MainPackage.UniSync.stmt;
 import static MainPackage.UniSync.student;
 import java.awt.event.ItemEvent;
+import java.text.DecimalFormat;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
 import javax.swing.table.DefaultTableModel;
@@ -21,6 +22,7 @@ import javax.swing.table.DefaultTableModel;
 public class GradesPage extends javax.swing.JFrame {
 
     DefaultTableModel model;
+    DecimalFormat decimalFormat = new DecimalFormat("#.##");
     /**
      * Creates new form MainPage
      */
@@ -35,7 +37,7 @@ public class GradesPage extends javax.swing.JFrame {
 			
 		while (UniSync.result.next()) {
                     
-                    model.insertRow(model.getRowCount(), new Object[] {UniSync.result.getString("Code"), UniSync.result.getDouble("Credits"), UniSync.result.getDouble("Grade"), UniSync.result.getDouble("CourseAverage")});
+                    model.insertRow(model.getRowCount(), new Object[] {UniSync.result.getString("Code"), UniSync.result.getDouble("Credits"), Double.parseDouble(decimalFormat.format(UniSync.result.getDouble("Grade"))), UniSync.result.getDouble("CourseAverage")});
 					
                 }			
 	}catch(Exception e){
@@ -45,9 +47,8 @@ public class GradesPage extends javax.swing.JFrame {
         
         
         //Load Combo Box options
+        DefaultComboBoxModel modelCombo = (DefaultComboBoxModel) rSComboMetro1.getModel();
         try{
-            DefaultComboBoxModel modelCombo = (DefaultComboBoxModel) rSComboMetro1.getModel();
-            
             UniSync.result = UniSync.stmt.executeQuery("Select * from courses inner join studentcourses using (Code) where Status=1 and StudentID =" + UniSync.getStudent().getStudentID() );
                
             while (UniSync.result.next()) {
@@ -57,6 +58,16 @@ public class GradesPage extends javax.swing.JFrame {
             e.printStackTrace();
 	}
         
+        
+        Double courseAvg = UniSync.calculateCourseGrade((String)modelCombo.getSelectedItem());
+        jLabel4.setText("Current Grade in "+ (String)modelCombo.getSelectedItem());
+        
+        courseAvg = Double.parseDouble(decimalFormat.format(courseAvg));
+        courseGradeLabel.setText(Double.toString(courseAvg)+ "%");
+        
+        double gpa = UniSync.calcGPA();
+        gpa = Double.parseDouble(decimalFormat.format(gpa));
+        gpaLabel.setText(Double.toString(gpa));
       
     }
     
@@ -80,6 +91,12 @@ public class GradesPage extends javax.swing.JFrame {
         jScrollPane2 = new javax.swing.JScrollPane();
         rSTableMetro2 = new rojeru_san.complementos.RSTableMetro();
         errorMsg = new javax.swing.JLabel();
+        jPanel4 = new javax.swing.JPanel();
+        jLabel4 = new javax.swing.JLabel();
+        courseGradeLabel = new javax.swing.JLabel();
+        jPanel5 = new javax.swing.JPanel();
+        gpaLabel = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
         rSComboMetro1 = new rojerusan.RSComboMetro();
@@ -89,6 +106,8 @@ public class GradesPage extends javax.swing.JFrame {
         modifyGradeButton = new rojerusan.RSMaterialButtonRectangle();
         txt_enterDelivNum = new app.bolivia.swing.JCTextField();
         errorMsg2 = new javax.swing.JLabel();
+        jPanel6 = new javax.swing.JPanel();
+        jLabel5 = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
 
@@ -142,6 +161,67 @@ public class GradesPage extends javax.swing.JFrame {
         rSTableMetro2.setColorBackgoundHead(new java.awt.Color(204, 0, 51));
         jScrollPane2.setViewportView(rSTableMetro2);
 
+        jPanel4.setBackground(new java.awt.Color(204, 0, 51));
+
+        jLabel4.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel4.setText("Current Grade");
+
+        courseGradeLabel.setFont(new java.awt.Font("Segoe UI Black", 1, 36)); // NOI18N
+        courseGradeLabel.setForeground(new java.awt.Color(255, 255, 255));
+        courseGradeLabel.setText("jLabel5");
+
+        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
+        jPanel4.setLayout(jPanel4Layout);
+        jPanel4Layout.setHorizontalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addComponent(courseGradeLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
+        );
+        jPanel4Layout.setVerticalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
+                .addGap(19, 19, 19)
+                .addComponent(courseGradeLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 64, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel4)
+                .addContainerGap())
+        );
+
+        jPanel5.setBackground(new java.awt.Color(204, 0, 51));
+
+        gpaLabel.setFont(new java.awt.Font("Segoe UI Black", 1, 36)); // NOI18N
+        gpaLabel.setForeground(new java.awt.Color(255, 255, 255));
+
+        jLabel6.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel6.setText("Current GPA");
+
+        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
+        jPanel5.setLayout(jPanel5Layout);
+        jPanel5Layout.setHorizontalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel5Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(gpaLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(17, Short.MAX_VALUE))
+        );
+        jPanel5Layout.setVerticalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
+                .addGap(19, 19, 19)
+                .addComponent(gpaLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 64, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel6)
+                .addContainerGap())
+        );
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -153,14 +233,18 @@ public class GradesPage extends javax.swing.JFrame {
                         .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 296, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(26, 26, 26)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(errorMsg, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(txt_enterCourse, javax.swing.GroupLayout.PREFERRED_SIZE, 173, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(addCourseButton, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(deleteCourseButton, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(errorMsg, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(128, 128, 128)
+                                .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
                 .addContainerGap(52, Short.MAX_VALUE))
             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jPanel1Layout.createSequentialGroup()
@@ -180,13 +264,19 @@ public class GradesPage extends javax.swing.JFrame {
                     .addComponent(txt_enterCourse, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(addCourseButton, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(deleteCourseButton, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(302, Short.MAX_VALUE))
+                .addGap(64, 64, 64)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jPanel1Layout.createSequentialGroup()
                     .addGap(71, 71, 71)
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addContainerGap(346, Short.MAX_VALUE)))
         );
+
+        jPanel2.setForeground(new java.awt.Color(255, 255, 255));
 
         jLabel3.setFont(new java.awt.Font("Segoe UI Semilight", 1, 18)); // NOI18N
         jLabel3.setText("Modify Your Deliverables Here");
@@ -213,7 +303,15 @@ public class GradesPage extends javax.swing.JFrame {
             new String [] {
                 "Number", "Name", "Grade", "Weight"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         deliverablesTable.setColorBackgoundHead(new java.awt.Color(204, 0, 51));
         jScrollPane1.setViewportView(deliverablesTable);
 
@@ -240,26 +338,52 @@ public class GradesPage extends javax.swing.JFrame {
             }
         });
 
+        jLabel5.setText("Grade Calculator");
+
+        javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
+        jPanel6.setLayout(jPanel6Layout);
+        jPanel6Layout.setHorizontalGroup(
+            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel6Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 216, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(369, Short.MAX_VALUE))
+        );
+        jPanel6Layout.setVerticalGroup(
+            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel6Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(185, Short.MAX_VALUE))
+        );
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(32, 32, 32)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(errorMsg2, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(32, 32, 32)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 296, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 413, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(rSComboMetro1, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(32, 32, 32)
                         .addComponent(txt_enterDelivNum, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(txt_enterGrade, javax.swing.GroupLayout.PREFERRED_SIZE, 173, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(modifyGradeButton, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 296, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(modifyGradeButton, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(errorMsg2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 413, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(rSComboMetro1, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(51, Short.MAX_VALUE))
+                        .addGap(19, 19, 19)
+                        .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -268,15 +392,17 @@ public class GradesPage extends javax.swing.JFrame {
                 .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(12, 12, 12)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 377, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(rSComboMetro1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(errorMsg2, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                    .addComponent(rSComboMetro1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 219, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txt_enterGrade, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(modifyGradeButton, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txt_enterDelivNum, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(46, 46, 46)
+                .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(errorMsg2, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -374,6 +500,7 @@ public class GradesPage extends javax.swing.JFrame {
         try{
             DefaultTableModel model = (DefaultTableModel) rSTableMetro2.getModel();
             DefaultComboBoxModel modelCombo = (DefaultComboBoxModel) rSComboMetro1.getModel();
+            
             int res = UniSync.addCourses(UniSync.getStudent().getStudentID(), codeEntered);
         
             switch (res) {
@@ -388,7 +515,11 @@ public class GradesPage extends javax.swing.JFrame {
                             modelCombo.addElement(UniSync.result.getString("Code"));
                         }
                         
-                    }   errorMsg.setText("Course succesfully added");
+                    }   
+                    errorMsg.setText("Course succesfully added");
+                    double gpa = UniSync.calcGPA();
+                    gpa = Double.parseDouble(decimalFormat.format(gpa));
+                    gpaLabel.setText(Double.toString(gpa));
                     break;
                 default:
                     errorMsg.setText("Course does not exist");
@@ -406,12 +537,14 @@ public class GradesPage extends javax.swing.JFrame {
     }//GEN-LAST:event_txt_enterGradeActionPerformed
 
     private void modifyGradeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_modifyGradeButtonActionPerformed
-        DefaultTableModel model = (DefaultTableModel) rSTableMetro2.getModel();
+        DefaultTableModel modelDelivTable = (DefaultTableModel) deliverablesTable.getModel();
+        DefaultTableModel modelCourseTable = (DefaultTableModel) rSTableMetro2.getModel();
         DefaultComboBoxModel modelCombo = (DefaultComboBoxModel) rSComboMetro1.getModel();
         
         String courseSelected = (String)modelCombo.getSelectedItem();
         int numEntered = Integer.parseInt(txt_enterDelivNum.getText());
         Double gradeEntered = Double.valueOf(txt_enterGrade.getText());
+        
         
         try{
             
@@ -420,7 +553,27 @@ public class GradesPage extends javax.swing.JFrame {
         
             switch (res) {
                 case 1:
-                    model.setValueAt(gradeEntered, numEntered-1, 2);
+                    modelDelivTable.setValueAt(gradeEntered, numEntered-1, 2);
+                    
+                    Double courseAvg = UniSync.calculateCourseGrade(courseSelected);
+                    
+                    int rowCount = modelCourseTable.getRowCount();
+            
+                    for (int row = 0; row < rowCount; row++) {
+                        Object course = rSTableMetro2.getValueAt(row, 0);
+                        if (course.equals(courseSelected)) {
+                            modelCourseTable.setValueAt(courseAvg, row, 2);
+                            break;
+                        }    
+                    }
+                    jLabel4.setText("Current Grade in "+ courseSelected);
+                    courseAvg = Double.parseDouble(decimalFormat.format(courseAvg));
+                  
+                    courseGradeLabel.setText(Double.toString(courseAvg)+ "%");
+                    
+                    double gpa = UniSync.calcGPA();
+                    gpa = Double.parseDouble(decimalFormat.format(gpa));
+                    gpaLabel.setText(Double.toString(gpa));
                     break;
                 
                 default:
@@ -462,9 +615,9 @@ public class GradesPage extends javax.swing.JFrame {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-
+            
+            DefaultComboBoxModel modelCombo = (DefaultComboBoxModel) rSComboMetro1.getModel();
             try {
-                DefaultComboBoxModel modelCombo = (DefaultComboBoxModel) rSComboMetro1.getModel();
                 modelCombo.removeAllElements();
 
                 UniSync.result = UniSync.stmt.executeQuery("Select * from courses inner join studentcourses using (Code) where Status=1 and StudentID =" + UniSync.getStudent().getStudentID());
@@ -478,6 +631,13 @@ public class GradesPage extends javax.swing.JFrame {
             }
 
             isUpdating = false;
+            
+            
+            
+            Double courseAvg = UniSync.calculateCourseGrade((String)modelCombo.getSelectedItem());
+            jLabel4.setText("Current Grade in "+ (String)modelCombo.getSelectedItem());
+            courseAvg = Double.parseDouble(decimalFormat.format(courseAvg));
+            courseGradeLabel.setText(Double.toString(courseAvg)+ "%");
         }
             
     }//GEN-LAST:event_rSComboMetro1ItemStateChanged
@@ -522,16 +682,24 @@ public class GradesPage extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private rojerusan.RSMaterialButtonRectangle addCourseButton;
+    private javax.swing.JLabel courseGradeLabel;
     private rojerusan.RSMaterialButtonRectangle deleteCourseButton;
     private rojeru_san.complementos.RSTableMetro deliverablesTable;
     private javax.swing.JLabel errorMsg;
     private javax.swing.JLabel errorMsg2;
+    private javax.swing.JLabel gpaLabel;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
+    private javax.swing.JPanel jPanel5;
+    private javax.swing.JPanel jPanel6;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private rojerusan.RSMaterialButtonRectangle modifyGradeButton;
