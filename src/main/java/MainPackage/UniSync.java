@@ -246,6 +246,29 @@ public class UniSync {
                 
         }
         
+        public static double weightSum( String courseCode){
+                double sum=0;
+                double weightSum=0;
+		try{
+                    result = stmt.executeQuery("Select * from studentdeliverables inner join deliverables "
+                              + "on studentdeliverables.Code = deliverables.Code and studentdeliverables.DeliverableNum = deliverables.DeliverableNum "
+                              + "where StudentID="+student.getStudentID()+" and studentdeliverables.Code='"+courseCode+"' and DeliverableStatus=1");
+                                        
+                    while (result.next()) {
+                        double weight= result.getDouble("DeliverableWeight");
+						
+                        weightSum= weightSum + weight;
+						
+                    }
+                    return weightSum;
+                    
+                }catch(Exception e){
+                    e.printStackTrace();
+                    return 0.0;
+		}			
+                
+        }
+        
 	public static void modifyCourse(int id) {
 		ResultSet result2= null;
 		Statement stmt2=null;
