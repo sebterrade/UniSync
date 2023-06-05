@@ -122,6 +122,7 @@ public class LoginPage extends javax.swing.JFrame {
     }//GEN-LAST:event_txt_studentIDActionPerformed
 
     private void rSMaterialButtonRectangle2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rSMaterialButtonRectangle2ActionPerformed
+        try {
         if (UniSync.verifyLogin(Integer.parseInt(txt_studentID.getText()), txt_password.getText()) == 1){
             HomePage frame = new HomePage();
             frame.setVisible(true);
@@ -129,7 +130,9 @@ public class LoginPage extends javax.swing.JFrame {
         }else{
             JOptionPane.showMessageDialog(this, "Incorrect Student ID or Password");
         }
-            
+        } catch (NumberFormatException e){
+            JOptionPane.showMessageDialog(this, "Incorrect Student ID or Password");
+        }
            
     }//GEN-LAST:event_rSMaterialButtonRectangle2ActionPerformed
 
