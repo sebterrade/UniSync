@@ -43,6 +43,8 @@ public class LoginPage extends javax.swing.JFrame {
         rSMaterialButtonRectangle1 = new rojerusan.RSMaterialButtonRectangle();
         rSMaterialButtonRectangle2 = new rojerusan.RSMaterialButtonRectangle();
         errorMsg = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(java.awt.Color.white);
@@ -106,6 +108,12 @@ public class LoginPage extends javax.swing.JFrame {
         });
         getContentPane().add(rSMaterialButtonRectangle2, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 530, -1, -1));
         getContentPane().add(errorMsg, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 510, 260, 10));
+
+        jLabel5.setIcon(new javax.swing.ImageIcon("C:\\Users\\sebte\\OneDrive\\Documents\\Projects\\UniSync\\src\\main\\java\\images\\icons8_Secure_50px.png")); // NOI18N
+        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 450, 50, 50));
+
+        jLabel7.setIcon(new javax.swing.ImageIcon("C:\\Users\\sebte\\OneDrive\\Documents\\Projects\\UniSync\\src\\main\\java\\images\\icons8_Account_50px.png")); // NOI18N
+        getContentPane().add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 340, 50, 50));
 
         setSize(new java.awt.Dimension(615, 835));
         setLocationRelativeTo(null);
@@ -178,7 +186,9 @@ public class LoginPage extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private rojerusan.RSMaterialButtonRectangle rSMaterialButtonRectangle1;
     private rojerusan.RSMaterialButtonRectangle rSMaterialButtonRectangle2;

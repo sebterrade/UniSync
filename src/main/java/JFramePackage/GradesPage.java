@@ -10,6 +10,7 @@ import static MainPackage.UniSync.result;
 import static MainPackage.UniSync.stmt;
 import static MainPackage.UniSync.student;
 import java.awt.event.ItemEvent;
+import java.sql.PreparedStatement;
 import java.text.DecimalFormat;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
@@ -33,30 +34,37 @@ public class GradesPage extends javax.swing.JFrame {
         //Load Courses table
         model = (DefaultTableModel) rSTableMetro2.getModel();
         try {
-		UniSync.result= UniSync.stmt.executeQuery("Select * from courses inner join studentcourses using (Code) where Status=1 and StudentID = " + UniSync.getStudent().getStudentID());
-			
-		while (UniSync.result.next()) {
-                    
-                    model.insertRow(model.getRowCount(), new Object[] {UniSync.result.getString("Code"), UniSync.result.getDouble("Credits"), Double.parseDouble(decimalFormat.format(UniSync.result.getDouble("Grade"))), UniSync.result.getDouble("CourseAverage")});
-					
-                }			
-	}catch(Exception e){
-		e.printStackTrace();
-	}
+            PreparedStatement stmt = UniSync.conn.prepareStatement("SELECT * FROM courses INNER JOIN studentcourses USING (Code) WHERE Status = 1 AND StudentID = ?");
+            stmt.setInt(1, UniSync.getStudent().getStudentID());
+            UniSync.result = stmt.executeQuery();
+
+            while (UniSync.result.next()) {
+                model.insertRow(model.getRowCount(), new Object[] {
+                        UniSync.result.getString("Code"),
+                        UniSync.result.getDouble("Credits"),
+                        Double.parseDouble(decimalFormat.format(UniSync.result.getDouble("Grade"))),
+                        UniSync.result.getDouble("CourseAverage")
+                });
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         
         
         
         //Load Combo Box options
         DefaultComboBoxModel modelCombo = (DefaultComboBoxModel) rSComboMetro1.getModel();
-        try{
-            UniSync.result = UniSync.stmt.executeQuery("Select * from courses inner join studentcourses using (Code) where Status=1 and StudentID =" + UniSync.getStudent().getStudentID() );
-               
+        try {
+            PreparedStatement stmt = UniSync.conn.prepareStatement("SELECT * FROM courses INNER JOIN studentcourses USING (Code) WHERE Status = 1 AND StudentID = ?");
+            stmt.setInt(1, UniSync.getStudent().getStudentID());
+            UniSync.result = stmt.executeQuery();
+
             while (UniSync.result.next()) {
                 modelCombo.addElement(UniSync.result.getString("Code"));
             }
-        }catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
-	}
+        }
         
         
         Double courseAvg = UniSync.calculateCourseGrade((String)modelCombo.getSelectedItem());
@@ -120,8 +128,8 @@ public class GradesPage extends javax.swing.JFrame {
         jLabel9 = new javax.swing.JLabel();
         calculateButton = new rojerusan.RSMaterialButtonRectangle();
         jPanel3 = new javax.swing.JPanel();
-        rSMaterialButtonRectangle1 = new rojerusan.RSMaterialButtonRectangle();
         jLabel1 = new javax.swing.JLabel();
+        rSMaterialButtonRectangle1 = new rojerusan.RSMaterialButtonRectangle();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(204, 0, 51));
@@ -255,12 +263,12 @@ public class GradesPage extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(20, 20, 20)))))
-                .addContainerGap(52, Short.MAX_VALUE))
+                .addContainerGap(40, Short.MAX_VALUE))
             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jPanel1Layout.createSequentialGroup()
                     .addGap(25, 25, 25)
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(56, Short.MAX_VALUE)))
+                    .addContainerGap(44, Short.MAX_VALUE)))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -278,12 +286,12 @@ public class GradesPage extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(73, Short.MAX_VALUE))
             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jPanel1Layout.createSequentialGroup()
                     .addGap(71, 71, 71)
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(297, Short.MAX_VALUE)))
+                    .addContainerGap(292, Short.MAX_VALUE)))
         );
 
         jPanel2.setForeground(new java.awt.Color(255, 255, 255));
@@ -449,28 +457,25 @@ public class GradesPage extends javax.swing.JFrame {
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(32, 32, 32)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 296, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(32, 32, 32)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 296, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 413, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(rSComboMetro1, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(32, 32, 32)
-                        .addComponent(txt_enterDelivNum, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(txt_enterGrade, javax.swing.GroupLayout.PREFERRED_SIZE, 173, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(modifyGradeButton, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(errorMsg2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(19, 19, 19)
-                        .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 413, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(rSComboMetro1, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE))))
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(32, 32, 32)
+                .addComponent(txt_enterDelivNum, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(txt_enterGrade, javax.swing.GroupLayout.PREFERRED_SIZE, 173, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(modifyGradeButton, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(errorMsg2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE)))
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(19, 19, 19)
+                .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -488,7 +493,7 @@ public class GradesPage extends javax.swing.JFrame {
                     .addComponent(txt_enterDelivNum, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(46, 46, 46)
                 .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, 179, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(76, 76, 76)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(errorMsg2, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -504,6 +509,10 @@ public class GradesPage extends javax.swing.JFrame {
             .addGap(0, 98, Short.MAX_VALUE)
         );
 
+        jLabel1.setFont(new java.awt.Font("Segoe UI Symbol", 1, 48)); // NOI18N
+        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel1.setText("Grades");
+
         rSMaterialButtonRectangle1.setBackground(new java.awt.Color(204, 0, 51));
         rSMaterialButtonRectangle1.setText("Done");
         rSMaterialButtonRectangle1.addActionListener(new java.awt.event.ActionListener() {
@@ -512,41 +521,37 @@ public class GradesPage extends javax.swing.JFrame {
             }
         });
 
-        jLabel1.setFont(new java.awt.Font("Segoe UI Symbol", 1, 48)); // NOI18N
-        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("Grades");
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 24, Short.MAX_VALUE)
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
             .addGroup(layout.createSequentialGroup()
                 .addGap(444, 444, 444)
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(layout.createSequentialGroup()
-                .addGap(406, 406, 406)
+                .addGap(434, 434, 434)
                 .addComponent(rSMaterialButtonRectangle1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(37, 37, 37)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 582, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
                 .addGap(18, 18, 18)
                 .addComponent(rSMaterialButtonRectangle1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(57, Short.MAX_VALUE))
+                .addContainerGap(93, Short.MAX_VALUE))
         );
 
         pack();
@@ -604,14 +609,15 @@ public class GradesPage extends javax.swing.JFrame {
                     errorMsg.setText("Course has already been added");
                     break;
                 case 2:
-                    UniSync.result = UniSync.stmt.executeQuery("Select * from courses inner join studentcourses using (Code) where Status=1 and StudentID =" + UniSync.getStudent().getStudentID() );
+                    PreparedStatement stmt = UniSync.conn.prepareStatement("SELECT * FROM courses INNER JOIN studentcourses USING (Code) WHERE Status = 1 AND StudentID = ? AND Code = ?");
+                    stmt.setInt(1, UniSync.getStudent().getStudentID());
+                    stmt.setString(2, codeEntered);
+                    UniSync.result = stmt.executeQuery();
+
                     while (UniSync.result.next()) {
-                        if (UniSync.result.getString("Code").equals(codeEntered)){
-                            model.addRow(new Object[] {UniSync.result.getString("Code"), UniSync.result.getDouble("Credits"), UniSync.result.getDouble("Grade"), UniSync.result.getDouble("CourseAverage") });
-                            modelCombo.addElement(UniSync.result.getString("Code"));
-                        }
-                        
-                    }   
+                        model.addRow(new Object[] {UniSync.result.getString("Code"), UniSync.result.getDouble("Credits"), UniSync.result.getDouble("Grade"), UniSync.result.getDouble("CourseAverage") });
+                        modelCombo.addElement(UniSync.result.getString("Code"));
+                    } 
                     errorMsg.setText("Course succesfully added");
                     double gpa = UniSync.calcGPA();
                     gpa = Double.parseDouble(decimalFormat.format(gpa));
@@ -701,12 +707,13 @@ public class GradesPage extends javax.swing.JFrame {
             model.setRowCount(0);
 
             try {
-                UniSync.result = UniSync.stmt.executeQuery("Select * from deliverables inner join studentdeliverables ON deliverables.Code = studentdeliverables.Code AND deliverables.DeliverableNum = studentdeliverables.DeliverableNum where studentdeliverables.StudentID =" + UniSync.getStudent().getStudentID());
+                PreparedStatement stmt = UniSync.conn.prepareStatement("SELECT * FROM deliverables INNER JOIN studentdeliverables ON deliverables.Code = studentdeliverables.Code AND deliverables.DeliverableNum = studentdeliverables.DeliverableNum WHERE studentdeliverables.StudentID = ? AND deliverables.Code = ?");
+                stmt.setInt(1, UniSync.getStudent().getStudentID());
+                stmt.setString(2, selectedItem);
+                UniSync.result = stmt.executeQuery();
 
                 while (UniSync.result.next()) {
-                    if (UniSync.result.getString("Code").equals(selectedItem)) {
-                        model.addRow(new Object[] { UniSync.result.getInt("DeliverableNum"), UniSync.result.getString("DeliverableName"), UniSync.result.getDouble("DeliverableGrade"), UniSync.result.getDouble("DeliverableWeight") });
-                    }
+                    model.addRow(new Object[] { UniSync.result.getInt("DeliverableNum"), UniSync.result.getString("DeliverableName"), UniSync.result.getDouble("DeliverableGrade"), UniSync.result.getDouble("DeliverableWeight") });
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -716,7 +723,9 @@ public class GradesPage extends javax.swing.JFrame {
             try {
                 modelCombo.removeAllElements();
 
-                UniSync.result = UniSync.stmt.executeQuery("Select * from courses inner join studentcourses using (Code) where Status=1 and StudentID =" + UniSync.getStudent().getStudentID());
+                PreparedStatement stmt = UniSync.conn.prepareStatement("SELECT * FROM courses INNER JOIN studentcourses USING (Code) WHERE Status = 1 AND StudentID = ?");
+                stmt.setInt(1, UniSync.getStudent().getStudentID());
+                UniSync.result = stmt.executeQuery();
 
                 while (UniSync.result.next()) {
                     modelCombo.addElement(UniSync.result.getString("Code"));
