@@ -18,6 +18,8 @@ public class LoginPage extends javax.swing.JFrame {
      */
     public LoginPage() {
         initComponents();
+        
+        new ComponentResizer(this);
     }
     
     
@@ -132,7 +134,7 @@ public class LoginPage extends javax.swing.JFrame {
     private void rSMaterialButtonRectangle2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rSMaterialButtonRectangle2ActionPerformed
         try {
         if (UniSync.verifyLogin(Integer.parseInt(txt_studentID.getText()), txt_password.getText()) == 1){
-            HomePage frame = new HomePage();
+            DashboardPage frame = new DashboardPage();
             frame.setVisible(true);
             LoginPage.this.dispose();
         }else{
