@@ -6,6 +6,8 @@ package MainPackage;
 import JFramePackage.LoginPage;
 import JFramePackage.LoginPage;
 import JFramePackage.SignupPage;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import java.sql.SQLException;
 
 //binds for '' sql injection
@@ -15,6 +17,10 @@ import java.util.Scanner;
 import java.awt.EventQueue;
 import java.sql.*;
 import com.mysql.jdbc.Driver;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 /**
  *
  * @author sebte
@@ -59,7 +65,7 @@ public class UniSync {
 					student.setProgram(result.getString("Program"));
 					student.setYear(result.getInt("Year"));
 					
-					calcGPA();
+					student.setGPA(calcGPA());
 					return 1;
 				}
 					
@@ -179,6 +185,145 @@ public class UniSync {
                 }
 	}
         
+        public static int addDeliverableDate(String courseCode, int deliverableNum, String date){
+            try {   
+                    
+                    
+                    
+                    PreparedStatement checkStatusStatement = conn.prepareStatement("SELECT * FROM studentdeliverables WHERE DeliverableNum = ? AND Code = ? AND StudentID = ? AND DeliverableStatus > 0");                    checkStatusStatement.setInt(1, deliverableNum);
+                    checkStatusStatement.setString(2, courseCode);
+                    checkStatusStatement.setInt(3, student.getStudentID());
+                    result = checkStatusStatement.executeQuery();
+                    while(result.next()){
+                        return 3;
+                    }
+                    //If due date has not already been added      
+                    URL url = new URL("https://digidates.de/api/v1/checkdate?date=2023-01-01");
+                    HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                    connection.setRequestMethod("GET");
+                    int responseCode = connection.getResponseCode();
+                    if (responseCode == HttpURLConnection.HTTP_OK) {
+                        BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+                        String line;
+                        StringBuilder response = new StringBuilder();
+
+                        while ((line = reader.readLine()) != null) {
+                            response.append(line);
+                        }
+                        reader.close();
+
+                        // Process the JSON response
+                        String jsonResponse = response.toString();
+                        // Parse the JSON and check the "checkdate" value
+                        // Assuming you are using a JSON library like Gson
+                        JsonObject jsonObject = new Gson().fromJson(jsonResponse, JsonObject.class);
+                        boolean isDateValid = jsonObject.get("checkdate").getAsBoolean();
+
+                        if (isDateValid) {
+                            System.out.println("The date is valid.");
+                            
+                            PreparedStatement pstmt = conn.prepareStatement("update studentdeliverables set DueDate =?, DeliverableStatus = 1 where DeliverableNum=? and Code=? and StudentID = ?");
+                            pstmt.setString(1, date);
+                            pstmt.setInt(2, deliverableNum);
+                            pstmt.setString(3, courseCode);
+                            pstmt.setInt(4, student.getStudentID());
+                            pstmt.executeUpdate();
+                            connection.disconnect();
+                            return 1;
+                            
+                        } else {
+                            System.out.println("The date is invalid.");
+                            connection.disconnect();
+                            return 2;
+                        }
+                    } else {
+                        System.out.println("Error: " + responseCode);
+                        connection.disconnect();
+                        return 0;
+                    }
+
+                   
+                
+                    
+
+                }catch(Exception e){
+                        e.printStackTrace();
+                        return 0;
+                }
+        }
+        
+        public static int removeDeliverableDate(String courseCode, int deliverableNum){
+            try {   
+                    
+                    PreparedStatement checkStatusStatement = conn.prepareStatement("SELECT * FROM studentdeliverables WHERE DeliverableNum = ? AND Code = ? AND StudentID = ? AND DeliverableStatus = 0");                    
+                    checkStatusStatement.setInt(1, deliverableNum);
+                    checkStatusStatement.setString(2, courseCode);
+                    checkStatusStatement.setInt(3, student.getStudentID());
+                    result = checkStatusStatement.executeQuery();
+                    while(result.next()){
+                        return 2; //Deliverable has not been added yet
+                    }     
+
+                    PreparedStatement pstmt = conn.prepareStatement("update studentdeliverables set DueDate = null, DeliverableStatus = 0 where DeliverableNum=? and Code=? and StudentID = ?");
+                    pstmt.setInt(1, deliverableNum);
+                    pstmt.setString(2, courseCode);
+                    pstmt.setInt(3, student.getStudentID());
+                    pstmt.executeUpdate();
+                    return 1;
+                       
+            }catch(Exception e){
+                    e.printStackTrace();
+                    return 0;
+            }
+        }
+        
+        public static int completedDeliverableDate(String courseCode, int deliverableNum){
+                
+                try {   
+                    
+                    PreparedStatement checkStatusStatement = conn.prepareStatement("SELECT * FROM studentdeliverables WHERE DeliverableNum = ? AND Code = ? AND StudentID = ? AND (DeliverableStatus = 0 OR DeliverableStatus = 2)");                    
+                    checkStatusStatement.setInt(1, deliverableNum);
+                    checkStatusStatement.setString(2, courseCode);
+                    checkStatusStatement.setInt(3, student.getStudentID());
+                    result = checkStatusStatement.executeQuery();
+                    while(result.next()){
+                        return 2; //Deliverable has not been added yet
+                    }     
+
+                    PreparedStatement pstmt = conn.prepareStatement("update studentdeliverables set DeliverableStatus = 2 where DeliverableNum=? and Code=? and StudentID = ?");
+                    pstmt.setInt(1, deliverableNum);
+                    pstmt.setString(2, courseCode);
+                    pstmt.setInt(3, student.getStudentID());
+                    pstmt.executeUpdate();
+                    return 1;
+                       
+                }catch(Exception e){
+                        e.printStackTrace();
+                        return 0;
+                }
+
+        }
+        
+        public static int numCourses(){
+                int count =0;
+                try {
+                    PreparedStatement pstmt = conn.prepareStatement("select * from studentcourses where StudentID = ?");
+                    pstmt.setInt(1,student.getStudentID());
+                    result = pstmt.executeQuery();
+                    
+                    while (result.next()){
+                        count++;
+                    }
+                    
+                    return count;
+                    
+                    
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                    return 0;
+                }
+        }
+        
         public static int deleteCourses(int id, String courseCode) {
                 try {
                     PreparedStatement selectStmt = conn.prepareStatement("select * from studentcourses where Code = ? and StudentID = ?");
@@ -205,12 +350,22 @@ public class UniSync {
         public static int updateGrade(int deliverableNum, Double grade, String courseCode) {
                     
                 try {
-                    PreparedStatement pstmt = conn.prepareStatement("update studentdeliverables set DeliverableGrade =?, DeliverableStatus = 1 where DeliverableNum=? and Code=? and StudentID = ?");
-                    pstmt.setDouble(1, grade);
-                    pstmt.setInt(2, deliverableNum);
-                    pstmt.setString(3, courseCode);
-                    pstmt.setInt(4, student.getStudentID());
-                    pstmt.executeUpdate();
+                    PreparedStatement pstmt = conn.prepareStatement("select * from studentdeliverables where DeliverableNum=? and Code=? and StudentID = ? and DeliverableStatus<2");
+                    pstmt.setInt(1, deliverableNum);
+                    pstmt.setString(2, courseCode);
+                    pstmt.setInt(3, student.getStudentID());
+                    result = pstmt.executeQuery();
+                    
+                    while(result.next()){
+                        return 2; //Deliverable not completed yet
+                    }
+                    
+                    PreparedStatement updateStatement = conn.prepareStatement("update studentdeliverables set DeliverableGrade =? where DeliverableNum=? and Code=? and StudentID = ?");
+                    updateStatement.setDouble(1, grade);
+                    updateStatement.setInt(2, deliverableNum);
+                    updateStatement.setString(3, courseCode);
+                    updateStatement.setInt(4, student.getStudentID());
+                    updateStatement.executeUpdate();
                     return 1;
 
                 }catch(Exception e){

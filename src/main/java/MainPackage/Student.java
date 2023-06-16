@@ -41,7 +41,9 @@ public class Student {
 	public void setYear(int year) {
 		this.year = year;
 	}
-	
+        public void setGPA(double gpa){
+                this.gpa=gpa;
+        }	
 	
 	
 	public int getStudentID() {

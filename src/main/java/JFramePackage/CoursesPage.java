@@ -68,8 +68,8 @@ public class CoursesPage extends javax.swing.JFrame {
         courseAvg = Double.parseDouble(decimalFormat.format(courseAvg));
         courseGradeLabel.setText(Double.toString(courseAvg)+ "%");
         
-        double gpa = UniSync.calcGPA();
-        gpa = Double.parseDouble(decimalFormat.format(gpa));
+        UniSync.student.setGPA(UniSync.calcGPA());
+        double gpa = Double.parseDouble(decimalFormat.format(UniSync.student.getGPA()));
         gpaLabel.setText(Double.toString(gpa));
         
         courseGradeLabel1.setText(" ");
@@ -668,32 +668,36 @@ public class CoursesPage extends javax.swing.JFrame {
 
             switch (res) {
                 case 1:
-                modelDelivTable.setValueAt(gradeEntered, numEntered-1, 2);
+                    modelDelivTable.setValueAt(gradeEntered, numEntered-1, 2);
 
-                Double courseAvg = UniSync.calculateCourseGrade(courseSelected);
+                    Double courseAvg = UniSync.calculateCourseGrade(courseSelected);
 
-                int rowCount = modelCourseTable.getRowCount();
+                    int rowCount = modelCourseTable.getRowCount();
 
-                for (int row = 0; row < rowCount; row++) {
-                    Object course = rSTableMetro2.getValueAt(row, 0);
-                    if (course.equals(courseSelected)) {
-                        modelCourseTable.setValueAt(courseAvg, row, 2);
-                        break;
+                    for (int row = 0; row < rowCount; row++) {
+                        Object course = rSTableMetro2.getValueAt(row, 0);
+                        if (course.equals(courseSelected)) {
+                            modelCourseTable.setValueAt(courseAvg, row, 2);
+                            break;
+                        }
                     }
-                }
-                jLabel4.setText("Current Grade in "+ courseSelected);
-                courseAvg = Double.parseDouble(decimalFormat.format(courseAvg));
+                    jLabel4.setText("Current Grade in "+ courseSelected);
+                    courseAvg = Double.parseDouble(decimalFormat.format(courseAvg));
 
-                courseGradeLabel.setText(Double.toString(courseAvg)+ "%");
+                    courseGradeLabel.setText(Double.toString(courseAvg)+ "%");
 
-                double gpa = UniSync.calcGPA();
-                gpa = Double.parseDouble(decimalFormat.format(gpa));
-                gpaLabel.setText(Double.toString(gpa));
-                break;
+                    double gpa = UniSync.calcGPA();
+                    gpa = Double.parseDouble(decimalFormat.format(gpa));
+                    gpaLabel.setText(Double.toString(gpa));
+                    break;
+                
+                case 2:
+                    errorMsg2.setText("Deliverable has not been completed yet");
+                    break;
 
                 default:
-                errorMsg2.setText("Deliverable does not exist");
-                break;
+                    errorMsg2.setText("Deliverable does not exist");
+                    break;
             }
         }catch(Exception e){
             e.printStackTrace();

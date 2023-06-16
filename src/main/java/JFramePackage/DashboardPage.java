@@ -5,13 +5,28 @@
 package JFramePackage;
 
 import MainPackage.UniSync;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.sql.PreparedStatement;
 import java.text.DecimalFormat;
 import javax.swing.JOptionPane;
+
 
 /**
  *
  * @author sebte
  */
+
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartPanel;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.plot.CategoryPlot;
+import org.jfree.chart.plot.PiePlot;
+import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.chart.renderer.category.BarRenderer;
+import org.jfree.chart.renderer.category.LineAndShapeRenderer;
+import org.jfree.data.category.DefaultCategoryDataset;
+import org.jfree.data.general.DefaultPieDataset;
 public class DashboardPage extends javax.swing.JFrame {
     
     
@@ -21,9 +36,76 @@ public class DashboardPage extends javax.swing.JFrame {
      */
     public DashboardPage() {
         initComponents();
+        showBarChart();
+        showPieChart();
         
         studentName.setText(UniSync.getStudent().getFirstName() + " " + UniSync.getStudent().getLastName());
         programLabel.setText(UniSync.getStudent().getProgram());
+        
+        UniSync.student.setGPA(UniSync.calcGPA());
+        double gpa = Double.parseDouble(decimalFormat.format(UniSync.student.getGPA()));
+        gpaLabel.setText(Double.toString(gpa));
+        numCoursesLabel.setText(Integer.toString(UniSync.numCourses()));
+        yearLabel.setText(Integer.toString(UniSync.student.getYear()));
+    }
+    
+    public void showBarChart(){
+        DefaultCategoryDataset dataset = new DefaultCategoryDataset();
+        
+        try {
+            PreparedStatement stmt = UniSync.conn.prepareStatement("SELECT * FROM studentcourses where Status = 1 AND StudentID = ?");
+            stmt.setInt(1, UniSync.getStudent().getStudentID());
+            UniSync.result = stmt.executeQuery();
+
+            while (UniSync.result.next()) {
+                dataset.setValue(UniSync.result.getDouble("Grade"), "Grade", UniSync.result.getString("Code"));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        
+        JFreeChart chart = ChartFactory.createBarChart("Courses","Course Code","Grade", 
+                dataset, PlotOrientation.VERTICAL, false,true,false);
+        
+        CategoryPlot categoryPlot = chart.getCategoryPlot();
+        categoryPlot.setRangeGridlinePaint(Color.BLUE);
+        categoryPlot.setBackgroundPaint(Color.WHITE);
+        BarRenderer renderer = (BarRenderer) categoryPlot.getRenderer();
+        Color clr = new Color(204,0,51);
+        renderer.setSeriesPaint(0, clr);
+        
+        ChartPanel barpChartPanel = new ChartPanel(chart);
+        barChartPanel.removeAll();
+        barChartPanel.add(barpChartPanel, BorderLayout.CENTER);
+        barChartPanel.validate();
+        
+        
+    }
+    
+    public void showPieChart(){
+        
+        //create dataset
+      DefaultPieDataset barDataset = new DefaultPieDataset( );
+      barDataset.setValue( "Completed" , new Double( 100 ) );  
+      barDataset.setValue( "Not completed" , new Double( 20 ) );    
+      
+      //create chart
+       JFreeChart piechart = ChartFactory.createPieChart("Task Completion Status",barDataset, false,true,false);//explain
+      
+       PiePlot piePlot =(PiePlot) piechart.getPlot();
+      
+       //changing pie chart blocks colors
+       piePlot.setSectionPaint("Completed", new Color(255,255,102));
+       piePlot.setSectionPaint("Not completed", new Color(102,255,102));
+      
+       
+        piePlot.setBackgroundPaint(Color.white);
+        
+        //create chartPanel to display chart(graph)
+        ChartPanel barChartPanel = new ChartPanel(piechart);
+        pieChartPanel.removeAll();
+        pieChartPanel.add(barChartPanel, BorderLayout.CENTER);
+        pieChartPanel.validate();
     }
 
     /**
@@ -35,20 +117,23 @@ public class DashboardPage extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        paintList1 = new org.jfree.util.PaintList();
         jPanel3 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         jPanel15 = new javax.swing.JPanel();
         jPanel18 = new javax.swing.JPanel();
-        jPanel19 = new javax.swing.JPanel();
+        jLabel10 = new javax.swing.JLabel();
+        yearLabel = new javax.swing.JLabel();
+        barChartPanel = new javax.swing.JPanel();
         jPanel20 = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
-        jLabel10 = new javax.swing.JLabel();
+        gpaLabel = new javax.swing.JLabel();
         jPanel21 = new javax.swing.JPanel();
         jLabel9 = new javax.swing.JLabel();
-        jLabel11 = new javax.swing.JLabel();
+        numCoursesLabel = new javax.swing.JLabel();
         jPanel17 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
-        jPanel8 = new javax.swing.JPanel();
+        pieChartPanel = new javax.swing.JPanel();
         jPanel16 = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
         jPanel4 = new javax.swing.JPanel();
@@ -84,36 +169,42 @@ public class DashboardPage extends javax.swing.JFrame {
         jPanel15.setBackground(java.awt.Color.white);
         jPanel15.setLayout(new java.awt.BorderLayout());
 
-        jPanel18.setBackground(java.awt.Color.pink);
+        jPanel18.setBackground(java.awt.Color.white);
         jPanel18.setPreferredSize(new java.awt.Dimension(200, 0));
+
+        jLabel10.setText("Year");
+        jLabel10.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 2, 0, new java.awt.Color(204, 0, 51)));
+
+        yearLabel.setFont(new java.awt.Font("Segoe UI Semibold", 1, 24)); // NOI18N
+        yearLabel.setText("Year");
 
         javax.swing.GroupLayout jPanel18Layout = new javax.swing.GroupLayout(jPanel18);
         jPanel18.setLayout(jPanel18Layout);
         jPanel18Layout.setHorizontalGroup(
             jPanel18Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+            .addGroup(jPanel18Layout.createSequentialGroup()
+                .addGap(18, 18, 18)
+                .addGroup(jPanel18Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(yearLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 124, Short.MAX_VALUE)
+                    .addComponent(jLabel10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(58, Short.MAX_VALUE))
         );
         jPanel18Layout.setVerticalGroup(
             jPanel18Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+            .addGroup(jPanel18Layout.createSequentialGroup()
+                .addGap(24, 24, 24)
+                .addComponent(jLabel10)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(yearLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 72, Short.MAX_VALUE)
+                .addGap(12, 12, 12))
         );
 
         jPanel15.add(jPanel18, java.awt.BorderLayout.EAST);
 
-        jPanel19.setPreferredSize(new java.awt.Dimension(600, 300));
-
-        javax.swing.GroupLayout jPanel19Layout = new javax.swing.GroupLayout(jPanel19);
-        jPanel19.setLayout(jPanel19Layout);
-        jPanel19Layout.setHorizontalGroup(
-            jPanel19Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 600, Short.MAX_VALUE)
-        );
-        jPanel19Layout.setVerticalGroup(
-            jPanel19Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
-        );
-
-        jPanel15.add(jPanel19, java.awt.BorderLayout.PAGE_END);
+        barChartPanel.setBackground(java.awt.Color.white);
+        barChartPanel.setPreferredSize(new java.awt.Dimension(600, 300));
+        barChartPanel.setLayout(new java.awt.BorderLayout());
+        jPanel15.add(barChartPanel, java.awt.BorderLayout.PAGE_END);
 
         jPanel20.setBackground(java.awt.Color.white);
         jPanel20.setPreferredSize(new java.awt.Dimension(200, 432));
@@ -121,7 +212,8 @@ public class DashboardPage extends javax.swing.JFrame {
         jLabel4.setText("Current GPA");
         jLabel4.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 2, 0, new java.awt.Color(204, 0, 51)));
 
-        jLabel10.setText("GPA");
+        gpaLabel.setFont(new java.awt.Font("Segoe UI Semibold", 1, 24)); // NOI18N
+        gpaLabel.setText("GPA");
 
         javax.swing.GroupLayout jPanel20Layout = new javax.swing.GroupLayout(jPanel20);
         jPanel20.setLayout(jPanel20Layout);
@@ -130,7 +222,7 @@ public class DashboardPage extends javax.swing.JFrame {
             .addGroup(jPanel20Layout.createSequentialGroup()
                 .addGap(26, 26, 26)
                 .addGroup(jPanel20Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(gpaLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(50, Short.MAX_VALUE))
         );
@@ -139,9 +231,9 @@ public class DashboardPage extends javax.swing.JFrame {
             .addGroup(jPanel20Layout.createSequentialGroup()
                 .addGap(24, 24, 24)
                 .addComponent(jLabel4)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel10, javax.swing.GroupLayout.DEFAULT_SIZE, 72, Short.MAX_VALUE)
-                .addContainerGap())
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(gpaLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 72, Short.MAX_VALUE)
+                .addGap(12, 12, 12))
         );
 
         jPanel15.add(jPanel20, java.awt.BorderLayout.WEST);
@@ -151,27 +243,31 @@ public class DashboardPage extends javax.swing.JFrame {
         jLabel9.setText("Number of Courses");
         jLabel9.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 2, 0, new java.awt.Color(204, 0, 51)));
 
-        jLabel11.setText("NumCourses");
+        numCoursesLabel.setFont(new java.awt.Font("Segoe UI Semibold", 1, 24)); // NOI18N
+        numCoursesLabel.setText("NumCourses");
 
         javax.swing.GroupLayout jPanel21Layout = new javax.swing.GroupLayout(jPanel21);
         jPanel21.setLayout(jPanel21Layout);
         jPanel21Layout.setHorizontalGroup(
             jPanel21Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel21Layout.createSequentialGroup()
-                .addGap(15, 15, 15)
                 .addGroup(jPanel21Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(40, Short.MAX_VALUE))
+                    .addGroup(jPanel21Layout.createSequentialGroup()
+                        .addGap(15, 15, 15)
+                        .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel21Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(numCoursesLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(49, Short.MAX_VALUE))
         );
         jPanel21Layout.setVerticalGroup(
             jPanel21Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel21Layout.createSequentialGroup()
                 .addGap(24, 24, 24)
                 .addComponent(jLabel9)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(15, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(numCoursesLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 78, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         jPanel15.add(jPanel21, java.awt.BorderLayout.CENTER);
@@ -190,20 +286,9 @@ public class DashboardPage extends javax.swing.JFrame {
 
         jPanel3.add(jPanel2, java.awt.BorderLayout.WEST);
 
-        jPanel8.setPreferredSize(new java.awt.Dimension(400, 800));
-
-        javax.swing.GroupLayout jPanel8Layout = new javax.swing.GroupLayout(jPanel8);
-        jPanel8.setLayout(jPanel8Layout);
-        jPanel8Layout.setHorizontalGroup(
-            jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
-        );
-        jPanel8Layout.setVerticalGroup(
-            jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 500, Short.MAX_VALUE)
-        );
-
-        jPanel3.add(jPanel8, java.awt.BorderLayout.EAST);
+        pieChartPanel.setPreferredSize(new java.awt.Dimension(400, 800));
+        pieChartPanel.setLayout(new java.awt.BorderLayout());
+        jPanel3.add(pieChartPanel, java.awt.BorderLayout.EAST);
 
         jPanel16.setPreferredSize(new java.awt.Dimension(1000, 300));
 
@@ -293,6 +378,12 @@ public class DashboardPage extends javax.swing.JFrame {
 
         jPanel1.add(jPanel9);
 
+        jPanel10.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jPanel10MouseClicked(evt);
+            }
+        });
+
         jLabel7.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel7.setText("Deliverables");
         jPanel10.add(jLabel7);
@@ -376,6 +467,12 @@ public class DashboardPage extends javax.swing.JFrame {
         dispose();
     }//GEN-LAST:event_jPanel9MouseClicked
 
+    private void jPanel10MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel10MouseClicked
+        DeliverablesPage frame = new DeliverablesPage();
+        frame.setVisible(true);
+        dispose();
+    }//GEN-LAST:event_jPanel10MouseClicked
+
     /**
      * @param args the command line arguments
      */
@@ -412,9 +509,10 @@ public class DashboardPage extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JPanel barChartPanel;
+    private javax.swing.JLabel gpaLabel;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -433,7 +531,6 @@ public class DashboardPage extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel16;
     private javax.swing.JPanel jPanel17;
     private javax.swing.JPanel jPanel18;
-    private javax.swing.JPanel jPanel19;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel20;
     private javax.swing.JPanel jPanel21;
@@ -442,9 +539,12 @@ public class DashboardPage extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
-    private javax.swing.JPanel jPanel8;
     private javax.swing.JPanel jPanel9;
+    private javax.swing.JLabel numCoursesLabel;
+    private org.jfree.util.PaintList paintList1;
+    private javax.swing.JPanel pieChartPanel;
     private javax.swing.JLabel programLabel;
     private javax.swing.JLabel studentName;
+    private javax.swing.JLabel yearLabel;
     // End of variables declaration//GEN-END:variables
 }
