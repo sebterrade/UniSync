@@ -383,7 +383,7 @@ public class UniSync {
                     PreparedStatement pstmt = conn.prepareStatement(
                         "SELECT * FROM studentdeliverables " +
                         "INNER JOIN deliverables ON studentdeliverables.Code = deliverables.Code AND studentdeliverables.DeliverableNum = deliverables.DeliverableNum " +
-                        "WHERE StudentID = ? AND studentdeliverables.Code = ? AND DeliverableStatus = 1"
+                        "WHERE StudentID = ? AND studentdeliverables.Code = ? AND DeliverableStatus = 2"
                     );
                     pstmt.setInt(1, student.getStudentID());
                     pstmt.setString(2, courseCode);
@@ -416,7 +416,7 @@ public class UniSync {
                     PreparedStatement pstmt = conn.prepareStatement(
                         "SELECT * FROM studentdeliverables " +
                         "INNER JOIN deliverables ON studentdeliverables.Code = deliverables.Code AND studentdeliverables.DeliverableNum = deliverables.DeliverableNum " +
-                        "WHERE StudentID = ? AND studentdeliverables.Code = ? AND DeliverableStatus = 1"
+                        "WHERE StudentID = ? AND studentdeliverables.Code = ? AND DeliverableStatus = 2"
                     );
                     pstmt.setInt(1, student.getStudentID());
                     pstmt.setString(2, courseCode);
@@ -444,7 +444,7 @@ public class UniSync {
                     PreparedStatement pstmt = conn.prepareStatement(
                         "SELECT * FROM studentdeliverables " +
                         "INNER JOIN deliverables ON studentdeliverables.Code = deliverables.Code AND studentdeliverables.DeliverableNum = deliverables.DeliverableNum " +
-                        "WHERE StudentID = ? AND studentdeliverables.Code = ? AND DeliverableStatus = 1"
+                        "WHERE StudentID = ? AND studentdeliverables.Code = ? AND DeliverableStatus = 2"
                     );
                     pstmt.setInt(1, student.getStudentID());
                     pstmt.setString(2, courseCode);

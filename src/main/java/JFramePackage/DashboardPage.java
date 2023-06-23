@@ -83,29 +83,44 @@ public class DashboardPage extends javax.swing.JFrame {
     }
     
     public void showPieChart(){
-        
-        //create dataset
-      DefaultPieDataset barDataset = new DefaultPieDataset( );
-      barDataset.setValue( "Completed" , new Double( 100 ) );  
-      barDataset.setValue( "Not completed" , new Double( 20 ) );    
+        double completedWeightSum=0;
+        double weightSum = UniSync.numCourses()*100;
+
+        try{
+            PreparedStatement pstmt = UniSync.conn.prepareStatement("SELECT * FROM deliverables INNER JOIN studentdeliverables ON deliverables.Code = studentdeliverables.Code AND deliverables.DeliverableNum = studentdeliverables.DeliverableNum WHERE DeliverableStatus = 2 AND StudentID = ?");
+            pstmt.setInt(1, UniSync.getStudent().getStudentID());
+            UniSync.result = pstmt.executeQuery();
+
+            while (UniSync.result.next()) {
+                completedWeightSum += UniSync.result.getDouble("DeliverableWeight");
+            }
+            
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
+      
+      //create dataset
+        DefaultPieDataset barDataset = new DefaultPieDataset( );
+        barDataset.setValue( "Completed" , completedWeightSum );  
+        barDataset.setValue( "Not completed" , weightSum - completedWeightSum);    
       
       //create chart
-       JFreeChart piechart = ChartFactory.createPieChart("Task Completion Status",barDataset, false,true,false);//explain
-      
-       PiePlot piePlot =(PiePlot) piechart.getPlot();
-      
-       //changing pie chart blocks colors
-       piePlot.setSectionPaint("Completed", new Color(255,255,102));
-       piePlot.setSectionPaint("Not completed", new Color(102,255,102));
-      
-       
-        piePlot.setBackgroundPaint(Color.white);
-        
-        //create chartPanel to display chart(graph)
-        ChartPanel barChartPanel = new ChartPanel(piechart);
-        pieChartPanel.removeAll();
-        pieChartPanel.add(barChartPanel, BorderLayout.CENTER);
-        pieChartPanel.validate();
+        JFreeChart piechart = ChartFactory.createPieChart("Task Completion Status",barDataset, false,true,false);//explain
+
+        PiePlot piePlot =(PiePlot) piechart.getPlot();
+
+        //changing pie chart blocks colors
+        piePlot.setSectionPaint("Completed", new Color(102,255,102));
+        piePlot.setSectionPaint("Not completed", new Color(204,0,51));
+
+
+         piePlot.setBackgroundPaint(Color.white);
+
+         //create chartPanel to display chart(graph)
+         ChartPanel barChartPanel = new ChartPanel(piechart);
+         pieChartPanel.removeAll();
+         pieChartPanel.add(barChartPanel, BorderLayout.CENTER);
+         pieChartPanel.validate();
     }
 
     /**

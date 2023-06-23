@@ -68,8 +68,8 @@ public class CoursesPage extends javax.swing.JFrame {
         courseAvg = Double.parseDouble(decimalFormat.format(courseAvg));
         courseGradeLabel.setText(Double.toString(courseAvg)+ "%");
         
-        UniSync.student.setGPA(UniSync.calcGPA());
-        double gpa = Double.parseDouble(decimalFormat.format(UniSync.student.getGPA()));
+        UniSync.getStudent().setGPA(UniSync.calcGPA());
+        double gpa = Double.parseDouble(decimalFormat.format(UniSync.getStudent().getGPA()));
         gpaLabel.setText(Double.toString(gpa));
         
         courseGradeLabel1.setText(" ");

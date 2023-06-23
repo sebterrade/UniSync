@@ -9,30 +9,37 @@ import java.sql.PreparedStatement;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.table.DefaultTableModel;
 
+
+
 /**
  *
  * @author sebte
  */
 public class DeliverablesPage extends javax.swing.JFrame {
-
-    
     /**
      * Creates new form DeliverablesPage
      */
-    public DeliverablesPage() {
+    static double currentWeight; //Weight of added deliverable (used for Row Renderer)
+    public  DeliverablesPage() {
         
         initComponents();
+        
         DefaultTableModel deliverablesTableModel = (DefaultTableModel)deliverablesTable.getModel();
+        RowRenderer rowRenderer = new RowRenderer();
+        deliverablesTable.setDefaultRenderer(Object.class, rowRenderer);
         try{
             PreparedStatement stmt = UniSync.conn.prepareStatement("SELECT * FROM deliverables INNER JOIN studentdeliverables ON deliverables.Code = studentdeliverables.Code "
                     + "AND deliverables.DeliverableNum = studentdeliverables.DeliverableNum WHERE DeliverableStatus = 1 AND StudentID = ?");
 
             stmt.setInt(1, UniSync.getStudent().getStudentID());
             UniSync.result = stmt.executeQuery();
-
+            
+            int rowCount = 0;
             while(UniSync.result.next()){
+                currentWeight = UniSync.result.getDouble("DeliverableWeight");
                 deliverablesTableModel.addRow(new Object[] {UniSync.result.getString("Code"), UniSync.result.getInt("DeliverableNum"), UniSync.result.getString("DeliverableName"), UniSync.result.getString("DueDate") });
-
+                rowRenderer.setTargetRow(rowCount);
+                rowCount++;
             }
         }catch(Exception e){
             e.printStackTrace();
@@ -189,6 +196,7 @@ public class DeliverablesPage extends javax.swing.JFrame {
         
         switch (res) {
             case 1:
+
                 try{
                     PreparedStatement stmt = UniSync.conn.prepareStatement("SELECT * FROM deliverables INNER JOIN studentdeliverables ON deliverables.Code = studentdeliverables.Code AND deliverables.DeliverableNum = studentdeliverables.DeliverableNum WHERE DeliverableStatus = 1 AND StudentID = ? AND studentdeliverables.Code = ? AND studentdeliverables.DeliverableNum = ?");
                     
@@ -198,8 +206,8 @@ public class DeliverablesPage extends javax.swing.JFrame {
                     UniSync.result = stmt.executeQuery();
                     
                     while(UniSync.result.next()){
+                        currentWeight = UniSync.result.getDouble("DeliverableWeight");
                         deliverablesTableModel.addRow(new Object[] {courseLabel.getText(), Integer.parseInt(deliverableIDLabel.getText()), UniSync.result.getString("DeliverableName"), dateLabel.getText() });
-                        
                     }
                 }catch(Exception e){
                     e.printStackTrace();
