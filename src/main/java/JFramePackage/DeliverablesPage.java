@@ -6,6 +6,8 @@ package JFramePackage;
 
 import MainPackage.UniSync;
 import java.sql.PreparedStatement;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.table.DefaultTableModel;
 
@@ -120,7 +122,12 @@ public class DeliverablesPage extends javax.swing.JFrame {
         });
         jPanel4.add(deliverableIDLabel);
 
-        dateLabel.setPlaceholder("Enter Due Date \"YYYY-MM-DD\"");
+        dateLabel.setPlaceholder("Enter Due Date \"dd/mm/yyyy\"");
+        dateLabel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                dateLabelActionPerformed(evt);
+            }
+        });
         jPanel4.add(dateLabel);
 
         addDeliverableButton.setBackground(new java.awt.Color(204, 0, 51));
@@ -265,6 +272,25 @@ public class DeliverablesPage extends javax.swing.JFrame {
         
         if (res == 1){
             int rowCount = deliverablesTableModel.getRowCount();
+            
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/uuuu");
+            LocalDateTime now = LocalDateTime.now();
+            
+            try{
+                PreparedStatement pstmt = UniSync.conn.prepareStatement("UPDATE studentdeliverables SET CompletedDate=? "
+                                                                        + "WHERE StudentID =? AND Code = ? AND DeliverableNum = ?");
+                pstmt.setString(1, formatter.format(now));
+                pstmt.setInt(2, UniSync.student.getStudentID());
+                pstmt.setString(3, courseLabel.getText());
+                pstmt.setInt(4, Integer.parseInt(deliverableIDLabel.getText()));
+                pstmt.executeUpdate();
+                
+                
+                
+            }catch(Exception e){
+                    e.printStackTrace();
+                }
+            
 
             for (int row = 0; row < rowCount; row++) {
                 Object code = deliverablesTable.getValueAt(row, 0);
@@ -280,6 +306,10 @@ public class DeliverablesPage extends javax.swing.JFrame {
             errorMsg.setText("Deliverable has not been added yet");
         }
     }//GEN-LAST:event_completedButtonActionPerformed
+
+    private void dateLabelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dateLabelActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_dateLabelActionPerformed
 
     /**
      * @param args the command line arguments

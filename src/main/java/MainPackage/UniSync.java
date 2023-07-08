@@ -21,6 +21,7 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.time.format.DateTimeFormatter;
 /**
  *
  * @author sebte
@@ -188,7 +189,7 @@ public class UniSync {
         public static int addDeliverableDate(String courseCode, int deliverableNum, String date){
             try {   
                     
-                    
+                    boolean isDateValid;
                     
                     PreparedStatement checkStatusStatement = conn.prepareStatement("SELECT * FROM studentdeliverables WHERE DeliverableNum = ? AND Code = ? AND StudentID = ? AND DeliverableStatus > 0");                    checkStatusStatement.setInt(1, deliverableNum);
                     checkStatusStatement.setString(2, courseCode);
@@ -198,53 +199,30 @@ public class UniSync {
                         return 3;
                     }
                     //If due date has not already been added      
-                    URL url = new URL("https://digidates.de/api/v1/checkdate?date=2023-01-01");
-                    HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-                    connection.setRequestMethod("GET");
-                    int responseCode = connection.getResponseCode();
-                    if (responseCode == HttpURLConnection.HTTP_OK) {
-                        BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-                        String line;
-                        StringBuilder response = new StringBuilder();
-
-                        while ((line = reader.readLine()) != null) {
-                            response.append(line);
-                        }
-                        reader.close();
-
-                        // Process the JSON response
-                        String jsonResponse = response.toString();
-                        // Parse the JSON and check the "checkdate" value
-                        // Assuming you are using a JSON library like Gson
-                        JsonObject jsonObject = new Gson().fromJson(jsonResponse, JsonObject.class);
-                        boolean isDateValid = jsonObject.get("checkdate").getAsBoolean();
-
-                        if (isDateValid) {
-                            System.out.println("The date is valid.");
-                            
-                            PreparedStatement pstmt = conn.prepareStatement("update studentdeliverables set DueDate =?, DeliverableStatus = 1 where DeliverableNum=? and Code=? and StudentID = ?");
-                            pstmt.setString(1, date);
-                            pstmt.setInt(2, deliverableNum);
-                            pstmt.setString(3, courseCode);
-                            pstmt.setInt(4, student.getStudentID());
-                            pstmt.executeUpdate();
-                            connection.disconnect();
-                            return 1;
-                            
-                        } else {
-                            System.out.println("The date is invalid.");
-                            connection.disconnect();
-                            return 2;
-                        }
-                    } else {
-                        System.out.println("Error: " + responseCode);
-                        connection.disconnect();
-                        return 0;
+                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/uuuu");
+                    
+                    try{
+                        formatter.parse(date);
+                        isDateValid=true;
+                    }catch(Exception e){
+                        isDateValid=false;
                     }
 
-                   
-                
-                    
+                    if (isDateValid) {
+                        System.out.println("The date is valid.");
+
+                        PreparedStatement pstmt = conn.prepareStatement("update studentdeliverables set DueDate =?, DeliverableStatus = 1 where DeliverableNum=? and Code=? and StudentID = ?");
+                        pstmt.setString(1, date);
+                        pstmt.setInt(2, deliverableNum);
+                        pstmt.setString(3, courseCode);
+                        pstmt.setInt(4, student.getStudentID());
+                        pstmt.executeUpdate();
+                        return 1;
+
+                    } else {
+                        System.out.println("The date is invalid.");
+                        return 2;
+                    }
 
                 }catch(Exception e){
                         e.printStackTrace();

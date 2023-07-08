@@ -137,7 +137,7 @@ public class CoursesPage extends javax.swing.JFrame {
         jLabel9 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        getContentPane().setLayout(new java.awt.BorderLayout(0, 15));
+        getContentPane().setLayout(new java.awt.BorderLayout(20, 15));
 
         jPanel1.setPreferredSize(new java.awt.Dimension(1200, 75));
 
@@ -166,7 +166,7 @@ public class CoursesPage extends javax.swing.JFrame {
 
         jPanel5.setLayout(new java.awt.BorderLayout(0, 25));
 
-        jPanel9.setPreferredSize(new java.awt.Dimension(600, 75));
+        jPanel9.setPreferredSize(new java.awt.Dimension(600, 50));
 
         txt_enterCourse.setPlaceholder("Enter Course... (e.g APSC100)");
         txt_enterCourse.setPreferredSize(new java.awt.Dimension(170, 32));
@@ -199,9 +199,12 @@ public class CoursesPage extends javax.swing.JFrame {
 
         jPanel5.add(jPanel9, java.awt.BorderLayout.SOUTH);
 
+        jPanel10.setLayout(new java.awt.BorderLayout());
+
         jLabel2.setFont(new java.awt.Font("Segoe UI Semilight", 1, 18)); // NOI18N
+        jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel2.setText("Enter Or Modify Your Courses Here");
-        jPanel10.add(jLabel2);
+        jPanel10.add(jLabel2, java.awt.BorderLayout.NORTH);
 
         rSTableMetro2.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -218,8 +221,10 @@ public class CoursesPage extends javax.swing.JFrame {
         rSTableMetro2.setColorSelBackgound(new java.awt.Color(204, 0, 51));
         jScrollPane2.setViewportView(rSTableMetro2);
 
-        jPanel10.add(jScrollPane2);
-        jPanel10.add(errorMsg);
+        jPanel10.add(jScrollPane2, java.awt.BorderLayout.CENTER);
+
+        errorMsg.setPreferredSize(new java.awt.Dimension(300, 10));
+        jPanel10.add(errorMsg, java.awt.BorderLayout.PAGE_END);
 
         jPanel5.add(jPanel10, java.awt.BorderLayout.CENTER);
 
@@ -303,10 +308,12 @@ public class CoursesPage extends javax.swing.JFrame {
         jPanel11.setLayout(new java.awt.BorderLayout(15, 25));
 
         jPanel15.setPreferredSize(new java.awt.Dimension(400, 300));
+        jPanel15.setLayout(new java.awt.BorderLayout());
 
         jLabel3.setFont(new java.awt.Font("Segoe UI Semilight", 1, 18)); // NOI18N
+        jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel3.setText("Modify Your Deliverables Here");
-        jPanel15.add(jLabel3);
+        jPanel15.add(jLabel3, java.awt.BorderLayout.NORTH);
 
         deliverablesTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -333,8 +340,10 @@ public class CoursesPage extends javax.swing.JFrame {
         deliverablesTable.setPreferredSize(new java.awt.Dimension(400, 300));
         jScrollPane1.setViewportView(deliverablesTable);
 
-        jPanel15.add(jScrollPane1);
-        jPanel15.add(errorMsg2);
+        jPanel15.add(jScrollPane1, java.awt.BorderLayout.CENTER);
+
+        errorMsg2.setPreferredSize(new java.awt.Dimension(300, 10));
+        jPanel15.add(errorMsg2, java.awt.BorderLayout.SOUTH);
 
         jPanel11.add(jPanel15, java.awt.BorderLayout.CENTER);
 
@@ -359,7 +368,7 @@ public class CoursesPage extends javax.swing.JFrame {
 
         jPanel11.add(jPanel16, java.awt.BorderLayout.EAST);
 
-        jPanel17.setPreferredSize(new java.awt.Dimension(700, 75));
+        jPanel17.setPreferredSize(new java.awt.Dimension(700, 50));
 
         txt_enterDelivNum.setPlaceholder("Enter Deliverable Number");
         txt_enterDelivNum.setPreferredSize(new java.awt.Dimension(170, 32));
