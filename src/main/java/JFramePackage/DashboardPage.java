@@ -7,9 +7,16 @@ package JFramePackage;
 import MainPackage.UniSync;
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.List;
 import java.sql.PreparedStatement;
 import java.text.DecimalFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import javax.swing.JOptionPane;
+import java.util.Collections;
+import java.util.Comparator;
 
 
 /**
@@ -36,8 +43,10 @@ public class DashboardPage extends javax.swing.JFrame {
      */
     public DashboardPage() {
         initComponents();
+        showLineChart();
         showBarChart();
         showPieChart();
+        
         
         studentName.setText(UniSync.getStudent().getFirstName() + " " + UniSync.getStudent().getLastName());
         programLabel.setText(UniSync.getStudent().getProgram());
@@ -122,6 +131,66 @@ public class DashboardPage extends javax.swing.JFrame {
          pieChartPanel.add(barChartPanel, BorderLayout.CENTER);
          pieChartPanel.validate();
     }
+    
+    public void showLineChart(){
+        
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/uuuu");
+        ArrayList<Pair> datesArr = new ArrayList<>();
+        
+        //create dataset for the graph
+        DefaultCategoryDataset dataset = new DefaultCategoryDataset();
+
+        
+        try{
+            PreparedStatement pstmt = UniSync.conn.prepareStatement("SELECT * from studentdeliverables WHERE StudentID = ? AND DeliverableStatus=2");
+            pstmt.setInt(1, UniSync.student.getStudentID());
+            UniSync.result = pstmt.executeQuery();
+
+            while(UniSync.result.next()){
+                LocalDate dueDate = LocalDate.parse(UniSync.result.getString("DueDate"), formatter);
+                LocalDate completedDate = LocalDate.parse(UniSync.result.getString("CompletedDate"), formatter);
+                
+                long daysBetween = ChronoUnit.DAYS.between(dueDate,completedDate );
+                
+                datesArr.add(new Pair(dueDate, daysBetween));
+                
+            }
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
+        
+        Collections.sort(datesArr, new Comparator<Pair>(){
+            public int compare(Pair pair1, Pair pair2){
+                return pair1.getDate().compareTo(pair2.getDate());
+            }
+        });
+        
+        for(Pair pair : datesArr){
+            System.out.println(pair.getDate() + " " + pair.getValue());
+            dataset.setValue(pair.getValue(), "Completion", "");
+        }
+      
+        
+        //create chart
+        JFreeChart linechart = ChartFactory.createLineChart("Performance","Time","Completion", 
+                dataset, PlotOrientation.VERTICAL, false,true,false);
+        
+        //create plot object
+        CategoryPlot lineCategoryPlot = linechart.getCategoryPlot();
+        // lineCategoryPlot.setRangeGridlinePaint(Color.BLUE);
+        lineCategoryPlot.setBackgroundPaint(Color.white);
+        
+        //create render object to change the moficy the line properties like color
+        LineAndShapeRenderer lineRenderer = (LineAndShapeRenderer) lineCategoryPlot.getRenderer();
+        Color lineChartColor = new Color(204,0,51);
+        lineRenderer.setSeriesPaint(0, lineChartColor);
+        
+        //create chartPanel to display chart(graph)
+        ChartPanel lineChartPanel = new ChartPanel(linechart);
+        panelLineChart.removeAll();
+        panelLineChart.add(lineChartPanel, BorderLayout.CENTER);
+        panelLineChart.validate();
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -150,6 +219,8 @@ public class DashboardPage extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         pieChartPanel = new javax.swing.JPanel();
         jPanel16 = new javax.swing.JPanel();
+        panelLineChart = new javax.swing.JPanel();
+        jPanel8 = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
         jPanel4 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
@@ -301,22 +372,44 @@ public class DashboardPage extends javax.swing.JFrame {
 
         jPanel3.add(jPanel2, java.awt.BorderLayout.WEST);
 
+        pieChartPanel.setBackground(java.awt.Color.white);
         pieChartPanel.setPreferredSize(new java.awt.Dimension(400, 800));
         pieChartPanel.setLayout(new java.awt.BorderLayout());
         jPanel3.add(pieChartPanel, java.awt.BorderLayout.EAST);
 
         jPanel16.setPreferredSize(new java.awt.Dimension(1000, 300));
+        jPanel16.setLayout(new java.awt.BorderLayout());
 
-        javax.swing.GroupLayout jPanel16Layout = new javax.swing.GroupLayout(jPanel16);
-        jPanel16.setLayout(jPanel16Layout);
-        jPanel16Layout.setHorizontalGroup(
-            jPanel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1000, Short.MAX_VALUE)
+        panelLineChart.setBackground(java.awt.Color.white);
+        panelLineChart.setPreferredSize(new java.awt.Dimension(600, 300));
+
+        javax.swing.GroupLayout panelLineChartLayout = new javax.swing.GroupLayout(panelLineChart);
+        panelLineChart.setLayout(panelLineChartLayout);
+        panelLineChartLayout.setHorizontalGroup(
+            panelLineChartLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
         );
-        jPanel16Layout.setVerticalGroup(
-            jPanel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        panelLineChartLayout.setVerticalGroup(
+            panelLineChartLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 300, Short.MAX_VALUE)
         );
+
+        jPanel16.add(panelLineChart, java.awt.BorderLayout.CENTER);
+
+        jPanel8.setPreferredSize(new java.awt.Dimension(400, 300));
+
+        javax.swing.GroupLayout jPanel8Layout = new javax.swing.GroupLayout(jPanel8);
+        jPanel8.setLayout(jPanel8Layout);
+        jPanel8Layout.setHorizontalGroup(
+            jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 400, Short.MAX_VALUE)
+        );
+        jPanel8Layout.setVerticalGroup(
+            jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 300, Short.MAX_VALUE)
+        );
+
+        jPanel16.add(jPanel8, java.awt.BorderLayout.EAST);
 
         jPanel3.add(jPanel16, java.awt.BorderLayout.SOUTH);
 
@@ -554,9 +647,11 @@ public class DashboardPage extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
+    private javax.swing.JPanel jPanel8;
     private javax.swing.JPanel jPanel9;
     private javax.swing.JLabel numCoursesLabel;
     private org.jfree.util.PaintList paintList1;
+    private javax.swing.JPanel panelLineChart;
     private javax.swing.JPanel pieChartPanel;
     private javax.swing.JLabel programLabel;
     private javax.swing.JLabel studentName;

@@ -27,8 +27,6 @@ public class DeliverablesPage extends javax.swing.JFrame {
         initComponents();
         
         DefaultTableModel deliverablesTableModel = (DefaultTableModel)deliverablesTable.getModel();
-        RowRenderer rowRenderer = new RowRenderer();
-        deliverablesTable.setDefaultRenderer(Object.class, rowRenderer);
         try{
             PreparedStatement stmt = UniSync.conn.prepareStatement("SELECT * FROM deliverables INNER JOIN studentdeliverables ON deliverables.Code = studentdeliverables.Code "
                     + "AND deliverables.DeliverableNum = studentdeliverables.DeliverableNum WHERE DeliverableStatus = 1 AND StudentID = ?");
@@ -40,7 +38,6 @@ public class DeliverablesPage extends javax.swing.JFrame {
             while(UniSync.result.next()){
                 currentWeight = UniSync.result.getDouble("DeliverableWeight");
                 deliverablesTableModel.addRow(new Object[] {UniSync.result.getString("Code"), UniSync.result.getInt("DeliverableNum"), UniSync.result.getString("DeliverableName"), UniSync.result.getString("DueDate") });
-                rowRenderer.setTargetRow(rowCount);
                 rowCount++;
             }
         }catch(Exception e){

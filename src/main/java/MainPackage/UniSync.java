@@ -43,17 +43,14 @@ public class UniSync {
                         //Class.forName("com.mysql.jdbc.Driver");
 			conn = DriverManager.getConnection("jdbc:mysql://localhost/unisync?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC","root","Terrade9854*");
 			stmt = conn.createStatement();
-			
-				
+					
 		}catch(Exception e){
 			e.printStackTrace();
 		}
 	}
-	
 	//Verify the user's login information
 	public static int verifyLogin(int id, String pass) {
 		
-
 		try {
 			result = stmt.executeQuery("Select * from students");
 			
@@ -72,13 +69,12 @@ public class UniSync {
 					
 			}
 			return 0;
-			
-				
+					
 		}catch(Exception e){
 			e.printStackTrace();
 			return 0;
 		}
-		
+
 	}
 	
 	//Register new user
@@ -118,7 +114,6 @@ public class UniSync {
 		}
 		
 		//Add a new course (function addCourse())
-		
 	}
 	
 	//Add another course 
@@ -177,8 +172,6 @@ public class UniSync {
                             return 2;
 
                         }
-
-
 
                 }catch(Exception e){
                         e.printStackTrace();
@@ -248,7 +241,7 @@ public class UniSync {
                     pstmt.setInt(3, student.getStudentID());
                     pstmt.executeUpdate();
                     return 1;
-                       
+                    
             }catch(Exception e){
                     e.printStackTrace();
                     return 0;
@@ -279,7 +272,6 @@ public class UniSync {
                         e.printStackTrace();
                         return 0;
                 }
-
         }
         
         public static int numCourses(){
